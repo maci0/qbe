@@ -20,6 +20,11 @@ qemu_not_needed() {
 	"$@"
 }
 
+wine_arm64_run() {
+	podman run --rm -v /tmp:/tmp -e WINEDEBUG=-all \
+		docker.io/linaro/wine-arm64 wine-arm64 "$@"
+}
+
 cc=
 find_cc_and_qemu() {
 	if [ -n "$cc" ]; then
@@ -101,6 +106,10 @@ init() {
 		do
 			find_cc_and_qemu x86_64-w64 "$p-gcc -static" "wine"
 		done
+		if test -z "$cc"; then
+			find_cc_and_qemu x86_64-w64 \
+				"zig cc --target=x86_64-windows-gnu -static" "wine"
+		fi
 		if test -z "$cc"
 		then
 			echo "Cannot find windows compiler or wine."
@@ -108,6 +117,34 @@ init() {
 		fi
 		export WINEDEBUG=-all
 		bin="$bin -t amd64_win"
+		;;
+	arm64_win)
+		for p in aarch64-w64-mingw32
+		do
+			find_cc_and_qemu aarch64-w64 "$p-gcc -static" "wine_arm64_run"
+		done
+		if test -z "$cc"; then
+			find_cc_and_qemu aarch64-w64 \
+				"zig cc --target=aarch64-windows-gnu -static" "wine_arm64_run"
+		fi
+		if test -z "$cc"
+		then
+			echo "Cannot find aarch64 windows compiler."
+			exit 1
+		fi
+		if test -z "$qemu"; then
+			if podman image exists docker.io/linaro/wine-arm64 2>/dev/null
+			then
+				qemu=wine_arm64_run
+				echo "runner: podman linaro/wine-arm64"
+				echo
+			else
+				echo "Cannot run arm64 PE (need: podman + linaro/wine-arm64)."
+				exit 1
+			fi
+		fi
+		export WINEDEBUG=-all
+		bin="$bin -t arm64_win"
 		;;
 	"")
 		case `uname` in

@@ -1,4 +1,4 @@
-# skip amd64_win (no signals on win32)
+# skip amd64_win arm64_win (no signals on win32)
 # test amd64 addressing modes
 
 export

@@ -60,6 +60,15 @@ Target T_arm64_apple = {
 	ARM64_COMMON
 };
 
+Target T_arm64_win = {
+	.name = "arm64_win",
+	.windows = 1,
+	.abi0 = elimsb,
+	.emitfin = pe_emitfin,
+	.asloc = "L",
+	ARM64_COMMON
+};
+
 MAKESURE(globals_are_not_arguments,
 	(RGLOB & (BIT(R8+1) - 1)) == 0
 );

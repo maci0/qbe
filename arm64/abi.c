@@ -212,9 +212,9 @@ selret(Blk *b, Fn *fn)
 }
 
 static int
-argsclass(Ins *i0, Ins *i1, Class *carg)
+argsclass(Ins *i0, Ins *i1, Class *carg, int wva)
 {
-	int va, envc, ngp, nfp, *gp, *fp;
+	int va, envc, winva, ngp, nfp, *gp, *fp;
 	Class *c;
 	Ins *i;
 
@@ -224,6 +224,17 @@ argsclass(Ins *i0, Ins *i1, Class *carg)
 	fp = fpreg;
 	ngp = 8;
 	nfp = 8;
+
+	/* pre-scan: on Windows ARM64, variadic calls
+	 * pass all args (including floats) in GP regs */
+	winva = wva;
+	if (!winva && T.windows)
+		for (i=i0; i<i1; i++)
+			if (i->op == Oargv) {
+				winva = 1;
+				break;
+			}
+
 	for (i=i0, c=carg; i<i1; i++, c++)
 		switch (i->op) {
 		case Oargsb:
@@ -250,6 +261,20 @@ argsclass(Ins *i0, Ins *i1, Class *carg)
 				c->class |= Cstk;
 				c->size = 8;
 				c->align = 8;
+				break;
+			}
+			/* Windows ARM64 varargs: floats go
+			 * in GP regs as bit patterns */
+			if (winva && KBASE(i->cls) == 1) {
+				*c->cls = Kl;
+				c->size = 8;
+				c->align = 8;
+				if (ngp > 0) {
+					ngp--;
+					*c->reg = *gp++;
+					break;
+				}
+				c->class |= Cstk;
 				break;
 			}
 			if (KBASE(i->cls) == 0 && ngp > 0) {
@@ -287,7 +312,7 @@ argsclass(Ins *i0, Ins *i1, Class *carg)
 			envc = 1;
 			break;
 		case Oargv:
-			va = T.apple != 0;
+			va = T.apple;
 			break;
 		default:
 			die("unreachable");
@@ -373,7 +398,7 @@ selcall(Fn *fn, Ins *i0, Ins *i1, Insl **ilp)
 	Ref r, rstk, tmp[4];
 
 	ca = alloc((i1-i0) * sizeof ca[0]);
-	cty = argsclass(i0, i1, ca);
+	cty = argsclass(i0, i1, ca, 0);
 
 	stk = 0;
 	for (i=i0, c=ca; i<i1; i++, c++) {
@@ -429,8 +454,12 @@ selcall(Fn *fn, Ins *i0, Ins *i1, Insl **ilp)
 	for (i=i0, c=ca; i<i1; i++, c++) {
 		if ((c->class & Cstk) != 0)
 			continue;
-		if (i->op == Oarg || i->op == Oarge || isargbh(i->op))
-			emit(Ocopy, *c->cls, TMP(*c->reg), i->arg[0], R);
+		if (i->op == Oarg || i->op == Oarge || isargbh(i->op)) {
+			if (KBASE(i->cls) != KBASE(*c->cls))
+				emit(Ocast, *c->cls, TMP(*c->reg), i->arg[0], R);
+			else
+				emit(Ocopy, *c->cls, TMP(*c->reg), i->arg[0], R);
+		}
 		if (i->op == Oargc)
 			ldregs(c->reg, c->cls, c->nreg, i->arg[1], fn);
 	}
@@ -482,7 +511,7 @@ selpar(Fn *fn, Ins *i0, Ins *i1)
 	ca = alloc((i1-i0) * sizeof ca[0]);
 	curi = &insb[NIns];
 
-	cty = argsclass(i0, i1, ca);
+	cty = argsclass(i0, i1, ca, T.windows && fn->vararg);
 	fn->reg = arm64_argregs(CALL(cty), 0);
 
 	il = 0;
@@ -528,7 +557,10 @@ selpar(Fn *fn, Ins *i0, Ins *i1)
 			emit(op, *c->cls, i->to, SLOT(-(off+2)), R);
 			off += c->size;
 		} else {
-			emit(Ocopy, *c->cls, i->to, TMP(*c->reg), R);
+			if (KBASE(i->cls) != KBASE(*c->cls))
+				emit(Ocast, i->cls, i->to, TMP(*c->reg), R);
+			else
+				emit(Ocopy, *c->cls, i->to, TMP(*c->reg), R);
 		}
 
 	return (Params){
@@ -679,6 +711,20 @@ arm64_selvaarg(Fn *fn, Blk *b, Ins *i)
 }
 
 static void
+win_selvastart(Fn *fn, Params p, Ref ap)
+{
+	Ref off, stk, arg;
+
+	off = getcon(p.ngp * 8 + p.stk, fn);
+	stk = newtmp("abi", Kl, fn);
+	arg = newtmp("abi", Kl, fn);
+
+	emit(Ostorel, 0, R, arg, ap);
+	emit(Oadd, Kl, arg, stk, off);
+	emit(Oaddr, Kl, stk, SLOT(-1), R);
+}
+
+static void
 apple_selvastart(Fn *fn, Params p, Ref ap)
 {
 	Ref off, stk, arg;
@@ -772,18 +818,20 @@ arm64_abi(Fn *fn)
 				selcall(fn, i0, i, &il);
 				i = i0;
 				break;
-			case Ovastart:
-				if (T.apple)
-					apple_selvastart(fn, p, i->arg[0]);
-				else
-					arm64_selvastart(fn, p, i->arg[0]);
-				break;
-			case Ovaarg:
-				if (T.apple)
-					apple_selvaarg(fn, b, i);
-				else
-					arm64_selvaarg(fn, b, i);
-				break;
+		case Ovastart:
+			if (T.windows)
+				win_selvastart(fn, p, i->arg[0]);
+			else if (T.apple)
+				apple_selvastart(fn, p, i->arg[0]);
+			else
+				arm64_selvastart(fn, p, i->arg[0]);
+			break;
+		case Ovaarg:
+			if (T.apple || T.windows)
+				apple_selvaarg(fn, b, i);
+			else
+				arm64_selvaarg(fn, b, i);
+			break;
 			case Oarg:
 			case Oargc:
 				die("unreachable");
