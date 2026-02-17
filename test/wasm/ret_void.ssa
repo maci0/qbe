@@ -1,0 +1,18 @@
+# expected: 42 w
+# void function (Jret0) and call with no return value
+
+data $buf = { w 0 }
+
+function $setval() {
+@start
+	storew 42, $buf
+	ret
+}
+
+export
+function w $test() {
+@start
+	call $setval()
+	%r =w load $buf
+	ret %r
+}

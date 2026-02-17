@@ -1,0 +1,12 @@
+# expected: 42 w
+# exported data emits global + export
+
+export
+data $val = { w 42 }
+
+export
+function w $test() {
+@start
+	%r =w load $val
+	ret %r
+}

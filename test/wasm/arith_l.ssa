@@ -1,0 +1,12 @@
+# expected: 1000000007 l
+# i64 arithmetic with large values
+
+export
+function l $test() {
+@start
+	%a =l add 1000000000, 7
+	%b =l mul %a, 3
+	%c =l sub %b, 2000000014
+	%d =l div %c, 1
+	ret %d
+}

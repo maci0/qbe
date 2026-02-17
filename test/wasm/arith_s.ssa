@@ -1,0 +1,12 @@
+# expected: 7 w
+# f32 arithmetic, truncate to int to check
+
+export
+function w $test() {
+@start
+	%a =s add s_1.5, s_3.5
+	%b =s mul %a, s_2.0
+	%c =s sub %b, s_3.0
+	%r =w stosi %c
+	ret %r
+}

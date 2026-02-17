@@ -1,0 +1,21 @@
+# expected: 1 w
+# data with DL, DH, DZ, and multiple segments
+
+data $lval = { l 1000000000000 }
+data $hval = { h 1234 }
+data $zbuf = { z 4, w 99 }
+
+export
+function w $test() {
+@start
+	%a =l load $lval
+	%achk =w ceql %a, 1000000000000
+	%b =w loaduh $hval
+	%bchk =w ceqw %b, 1234
+	%p =l add $zbuf, 4
+	%c =w load %p
+	%cchk =w ceqw %c, 99
+	%t0 =w and %achk, %bchk
+	%r =w and %t0, %cchk
+	ret %r
+}

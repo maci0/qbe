@@ -1,0 +1,22 @@
+# expected: 1 w
+# loadsw and loaduw: load word into i64
+
+data $neg = { w -1 }
+data $pos = { w 42 }
+
+export
+function w $test() {
+@start
+	%a =l loadsw $neg
+	%achk =w ceql %a, -1
+	%b =l loaduw $neg
+	%bchk =w ceql %b, 4294967295
+	%c =l loadsw $pos
+	%cchk =w ceql %c, 42
+	%d =l loaduw $pos
+	%dchk =w ceql %d, 42
+	%t0 =w and %achk, %bchk
+	%t1 =w and %t0, %cchk
+	%r =w and %t1, %dchk
+	ret %r
+}

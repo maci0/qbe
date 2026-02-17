@@ -1,0 +1,11 @@
+# expected: 72 w
+# load first byte of string data
+
+data $hello = { b "Hello", b 0 }
+
+export
+function w $test() {
+@start
+	%c =w loadub $hello
+	ret %c
+}

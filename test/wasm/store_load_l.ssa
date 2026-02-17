@@ -1,0 +1,13 @@
+# expected: 1 w
+# store and load i64 to memory
+
+data $val = { l 0 }
+
+export
+function w $test() {
+@start
+	storel 4000000000, $val
+	%v =l loadl $val
+	%r =w ceql %v, 4000000000
+	ret %r
+}

@@ -1,0 +1,18 @@
+# expected: 1 w
+# store and load f32 and f64
+
+data $fs = { z 4 }
+data $fd = { z 8 }
+
+export
+function w $test() {
+@start
+	stores s_3.14, $fs
+	%sv =s loads $fs
+	%schk =w ceqs %sv, s_3.14
+	stored d_2.718, $fd
+	%dv =d loadd $fd
+	%dchk =w ceqd %dv, d_2.718
+	%r =w and %schk, %dchk
+	ret %r
+}

@@ -1,0 +1,13 @@
+# expected: 42 w
+# simple if/else branching
+
+export
+function w $test() {
+@start
+	%c =w ceqw 1, 1
+	jnz %c, @yes, @no
+@yes
+	ret 42
+@no
+	ret 0
+}

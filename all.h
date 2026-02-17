@@ -61,9 +61,11 @@ struct Target {
 	void (*isel)(Fn *);
 	void (*emitfn)(Fn *, FILE *);
 	void (*emitfin)(FILE *);
+	void (*emitdat)(Dat *, FILE *);
 	char asloc[4];
 	char assym[4];
 	uint cansel:1;
+	uint noreg:1;
 };
 
 #define BIT(n) ((bits)1 << (n))

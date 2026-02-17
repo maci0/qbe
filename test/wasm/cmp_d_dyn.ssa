@@ -1,0 +1,25 @@
+# expected: 1 w
+# all 6 f64 comparisons with dynamic operands
+
+function w $cmpd(d %a, d %b, d %c) {
+@start
+	%eq =w ceqd %a, %c
+	%ne =w cned %a, %b
+	%lt =w cltd %a, %b
+	%gt =w cgtd %b, %a
+	%le =w cled %a, %c
+	%ge =w cged %c, %a
+	%t0 =w and %eq, %ne
+	%t1 =w and %t0, %lt
+	%t2 =w and %t1, %gt
+	%t3 =w and %t2, %le
+	%r =w and %t3, %ge
+	ret %r
+}
+
+export
+function w $test() {
+@start
+	%r =w call $cmpd(d d_1.0, d d_2.0, d d_1.0)
+	ret %r
+}

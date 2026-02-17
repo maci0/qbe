@@ -1,0 +1,14 @@
+# expected: 1 w
+# float ordered/unordered comparisons (NaN handling)
+
+export
+function w $test() {
+@start
+	%a =d div d_0.0, d_0.0
+	%ord =w cod %a, d_1.0
+	%ochk =w ceqw %ord, 0
+	%uord =w cuod %a, d_1.0
+	%uchk =w ceqw %uord, 1
+	%r =w and %ochk, %uchk
+	ret %r
+}

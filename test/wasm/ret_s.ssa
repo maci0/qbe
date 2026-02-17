@@ -1,0 +1,15 @@
+# expected: 3.0 s
+# function returning f32 (Jrets)
+
+function s $addf(s %a, s %b) {
+@start
+	%r =s add %a, %b
+	ret %r
+}
+
+export
+function s $test() {
+@start
+	%r =s call $addf(s s_1.0, s s_2.0)
+	ret %r
+}

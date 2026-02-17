@@ -1,0 +1,24 @@
+# expected: 7 w
+# function call inside conditional branch
+
+function w $inc(w %x) {
+@start
+	%r =w add %x, 1
+	ret %r
+}
+
+export
+function w $test() {
+@start
+	%c =w copy 1
+	jnz %c, @yes, @no
+@yes
+	%a =w call $inc(w 6)
+	jmp @done
+@no
+	%b =w call $inc(w 99)
+	jmp @done
+@done
+	%r =w phi @yes %a, @no %b
+	ret %r
+}

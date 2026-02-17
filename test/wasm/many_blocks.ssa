@@ -1,0 +1,33 @@
+# expected: 28 w
+# many blocks stress the br_table dispatch and label math
+
+function w $chain(w %x) {
+@b0
+	%v0 =w add %x, 1
+	jmp @b1
+@b1
+	%v1 =w add %v0, 2
+	jmp @b2
+@b2
+	%v2 =w add %v1, 3
+	jmp @b3
+@b3
+	%v3 =w add %v2, 4
+	jmp @b4
+@b4
+	%v4 =w add %v3, 5
+	jmp @b5
+@b5
+	%v5 =w add %v4, 6
+	jmp @b6
+@b6
+	%v6 =w add %v5, 7
+	ret %v6
+}
+
+export
+function w $test() {
+@start
+	%r =w call $chain(w 0)
+	ret %r
+}

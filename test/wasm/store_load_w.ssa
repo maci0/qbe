@@ -1,0 +1,12 @@
+# expected: 42 w
+# store and load i32 to memory
+
+data $buf = { w 0 }
+
+export
+function w $test() {
+@start
+	storew 42, $buf
+	%r =w load $buf
+	ret %r
+}

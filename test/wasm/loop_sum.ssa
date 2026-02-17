@@ -1,0 +1,17 @@
+# expected: 5050 w
+# sum 1..100 with phi
+
+export
+function w $test() {
+@start
+	jmp @loop
+@loop
+	%i =w phi @start 1, @loop %i1
+	%s =w phi @start 0, @loop %s1
+	%s1 =w add %s, %i
+	%i1 =w add %i, 1
+	%c =w csgtw %i1, 100
+	jnz %c, @done, @loop
+@done
+	ret %s1
+}

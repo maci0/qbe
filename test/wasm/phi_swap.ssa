@@ -1,0 +1,14 @@
+# expected: 1 w
+# euclid's algorithm - tests phi parallel swap
+
+export
+function w $test() {
+@start
+@loop
+	%a =w phi @start 747, @loop %b
+	%b =w phi @start 380, @loop %r
+	%r =w rem %a, %b
+	jnz %r, @loop, @end
+@end
+	ret %b
+}

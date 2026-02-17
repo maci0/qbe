@@ -1,0 +1,30 @@
+# expected: 1 w
+# data access at offsets (tests CAddr with nonzero offset)
+
+data $rec = { w 10, w 20, w 30, w 40 }
+
+function w $field2(l %base) {
+@start
+	%p =l add %base, 8
+	%r =w load %p
+	ret %r
+}
+
+export
+function w $test() {
+@start
+	%a =w load $rec
+	%achk =w ceqw %a, 10
+	%p1 =l add $rec, 4
+	%b =w load %p1
+	%bchk =w ceqw %b, 20
+	%c =w call $field2(l $rec)
+	%cchk =w ceqw %c, 30
+	%p3 =l add $rec, 12
+	%d =w load %p3
+	%dchk =w ceqw %d, 40
+	%t0 =w and %achk, %bchk
+	%t1 =w and %t0, %cchk
+	%r =w and %t1, %dchk
+	ret %r
+}

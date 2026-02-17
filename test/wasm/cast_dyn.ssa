@@ -1,0 +1,43 @@
+# expected: 1 w
+# all 4 cast (reinterpret) directions with dynamic operands
+
+function w $cast_sw(s %x) {
+@start
+	%r =w cast %x
+	ret %r
+}
+
+function s $cast_ws(w %x) {
+@start
+	%r =s cast %x
+	ret %r
+}
+
+function l $cast_dl(d %x) {
+@start
+	%r =l cast %x
+	ret %r
+}
+
+function d $cast_ld(l %x) {
+@start
+	%r =d cast %x
+	ret %r
+}
+
+export
+function w $test() {
+@start
+	%a =w call $cast_sw(s s_1.0)
+	%achk =w ceqw %a, 1065353216
+	%b =s call $cast_ws(w 1065353216)
+	%bchk =w ceqs %b, s_1.0
+	%c =l call $cast_dl(d d_1.0)
+	%cchk =w ceql %c, 4607182418800017408
+	%d =d call $cast_ld(l 4607182418800017408)
+	%dchk =w ceqd %d, d_1.0
+	%t0 =w and %achk, %bchk
+	%t1 =w and %t0, %cchk
+	%r =w and %t1, %dchk
+	ret %r
+}

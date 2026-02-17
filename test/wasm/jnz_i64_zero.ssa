@@ -1,0 +1,18 @@
+# expected: 0 w
+# jnz with i64 zero condition takes false branch
+
+function w $check(l %p) {
+@start
+	jnz %p, @nonnull, @null
+@nonnull
+	ret 1
+@null
+	ret 0
+}
+
+export
+function w $test() {
+@start
+	%r =w call $check(l 0)
+	ret %r
+}

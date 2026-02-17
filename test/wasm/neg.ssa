@@ -1,0 +1,15 @@
+# expected: 42 w
+# negation for int and float
+
+export
+function w $test() {
+@start
+	%a =w neg 10
+	%b =w sub 0, %a
+	# neg(10) = -10, 0 - (-10) = 10
+	%c =d neg d_5.0
+	%d =d add %c, d_47.0
+	# neg(5.0) = -5.0, -5.0 + 47.0 = 42.0
+	%r =w dtosi %d
+	ret %r
+}

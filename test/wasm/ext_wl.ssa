@@ -1,0 +1,14 @@
+# expected: 1 l
+# sign/zero extend word to long
+
+export
+function l $test() {
+@start
+	%a =l extsw -1
+	%achk =w ceql %a, -1
+	%b =l extuw 4294967295
+	%bchk =w ceql %b, 4294967295
+	%r =w and %achk, %bchk
+	%rl =l extsw %r
+	ret %rl
+}

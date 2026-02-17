@@ -1,0 +1,17 @@
+# expected: 60 w
+# load from initialized data array
+
+data $arr = { w 10, w 20, w 30 }
+
+export
+function w $test() {
+@start
+	%a =w load $arr
+	%p1 =l add $arr, 4
+	%b =w load %p1
+	%p2 =l add $arr, 8
+	%c =w load %p2
+	%s =w add %a, %b
+	%r =w add %s, %c
+	ret %r
+}

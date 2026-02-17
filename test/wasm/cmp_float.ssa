@@ -1,0 +1,25 @@
+# expected: 1 w
+# f32 and f64 comparisons
+
+export
+function w $test() {
+@start
+	%eq =w ceqs s_1.0, s_1.0
+	%ne =w cnes s_1.0, s_2.0
+	%lt =w clts s_1.0, s_2.0
+	%gt =w cgts s_2.0, s_1.0
+	%le =w cles s_1.0, s_1.0
+	%ge =w cges s_2.0, s_1.0
+	%t0 =w and %eq, %ne
+	%t1 =w and %t0, %lt
+	%t2 =w and %t1, %gt
+	%t3 =w and %t2, %le
+	%t4 =w and %t3, %ge
+	%deq =w ceqd d_3.14, d_3.14
+	%dne =w cned d_3.14, d_2.72
+	%dlt =w cltd d_2.72, d_3.14
+	%t5 =w and %t4, %deq
+	%t6 =w and %t5, %dne
+	%r =w and %t6, %dlt
+	ret %r
+}

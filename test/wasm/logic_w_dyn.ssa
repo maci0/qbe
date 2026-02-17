@@ -1,0 +1,61 @@
+# expected: 1 w
+# i32 bitwise and shift ops with dynamic operands
+
+function w $andw(w %a, w %b) {
+@start
+	%r =w and %a, %b
+	ret %r
+}
+
+function w $orw(w %a, w %b) {
+@start
+	%r =w or %a, %b
+	ret %r
+}
+
+function w $xorw(w %a, w %b) {
+@start
+	%r =w xor %a, %b
+	ret %r
+}
+
+function w $shlw(w %a, w %b) {
+@start
+	%r =w shl %a, %b
+	ret %r
+}
+
+function w $shrw(w %a, w %b) {
+@start
+	%r =w shr %a, %b
+	ret %r
+}
+
+function w $sarw(w %a, w %b) {
+@start
+	%r =w sar %a, %b
+	ret %r
+}
+
+export
+function w $test() {
+@start
+	%a =w call $andw(w 255, w 15)
+	%achk =w ceqw %a, 15
+	%b =w call $orw(w 48, w 3)
+	%bchk =w ceqw %b, 51
+	%c =w call $xorw(w 255, w 240)
+	%cchk =w ceqw %c, 15
+	%d =w call $shlw(w 1, w 10)
+	%dchk =w ceqw %d, 1024
+	%e =w call $shrw(w 1024, w 5)
+	%echk =w ceqw %e, 32
+	%f =w call $sarw(w -128, w 2)
+	%fchk =w ceqw %f, -32
+	%t0 =w and %achk, %bchk
+	%t1 =w and %t0, %cchk
+	%t2 =w and %t1, %dchk
+	%t3 =w and %t2, %echk
+	%r =w and %t3, %fchk
+	ret %r
+}

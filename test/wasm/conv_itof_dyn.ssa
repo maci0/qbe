@@ -1,0 +1,79 @@
+# expected: 1 w
+# int-to-float conversions with dynamic operands, all type combos
+
+function s $swtof_s(w %x) {
+@start
+	%r =s swtof %x
+	ret %r
+}
+
+function d $swtof_d(w %x) {
+@start
+	%r =d swtof %x
+	ret %r
+}
+
+function s $uwtof_s(w %x) {
+@start
+	%r =s uwtof %x
+	ret %r
+}
+
+function d $uwtof_d(w %x) {
+@start
+	%r =d uwtof %x
+	ret %r
+}
+
+function s $sltof_s(l %x) {
+@start
+	%r =s sltof %x
+	ret %r
+}
+
+function d $sltof_d(l %x) {
+@start
+	%r =d sltof %x
+	ret %r
+}
+
+function s $ultof_s(l %x) {
+@start
+	%r =s ultof %x
+	ret %r
+}
+
+function d $ultof_d(l %x) {
+@start
+	%r =d ultof %x
+	ret %r
+}
+
+export
+function w $test() {
+@start
+	%a =s call $swtof_s(w -5)
+	%achk =w ceqs %a, s_-5.0
+	%b =d call $swtof_d(w 7)
+	%bchk =w ceqd %b, d_7.0
+	%c =s call $uwtof_s(w 42)
+	%cchk =w ceqs %c, s_42.0
+	%d =d call $uwtof_d(w 100)
+	%dchk =w ceqd %d, d_100.0
+	%e =s call $sltof_s(l -10)
+	%echk =w ceqs %e, s_-10.0
+	%f =d call $sltof_d(l 1000)
+	%fchk =w ceqd %f, d_1000.0
+	%g =s call $ultof_s(l 50)
+	%gchk =w ceqs %g, s_50.0
+	%h =d call $ultof_d(l 2000)
+	%hchk =w ceqd %h, d_2000.0
+	%t0 =w and %achk, %bchk
+	%t1 =w and %t0, %cchk
+	%t2 =w and %t1, %dchk
+	%t3 =w and %t2, %echk
+	%t4 =w and %t3, %fchk
+	%t5 =w and %t4, %gchk
+	%r =w and %t5, %hchk
+	ret %r
+}

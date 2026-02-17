@@ -1,0 +1,19 @@
+# expected: 1 w
+# int to float conversions: swtof, uwtof, sltof, ultof
+
+export
+function w $test() {
+@start
+	%a =d swtof -5
+	%achk =w ceqd %a, d_-5.0
+	%b =d uwtof 42
+	%bchk =w ceqd %b, d_42.0
+	%c =d sltof 1000000000000
+	%cchk =w ceqd %c, d_1000000000000.0
+	%d =s swtof 7
+	%dchk =w ceqs %d, s_7.0
+	%t0 =w and %achk, %bchk
+	%t1 =w and %t0, %cchk
+	%r =w and %t1, %dchk
+	ret %r
+}

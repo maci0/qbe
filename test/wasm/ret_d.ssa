@@ -1,0 +1,15 @@
+# expected: 7.5 d
+# function returning f64 (Jretd)
+
+function d $muld(d %a, d %b) {
+@start
+	%r =d mul %a, %b
+	ret %r
+}
+
+export
+function d $test() {
+@start
+	%r =d call $muld(d d_2.5, d d_3.0)
+	ret %r
+}

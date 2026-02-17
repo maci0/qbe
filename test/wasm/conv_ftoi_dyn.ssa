@@ -1,0 +1,79 @@
+# expected: 1 w
+# float-to-int conversions with dynamic operands, all type combos
+
+function w $stosi_w(s %x) {
+@start
+	%r =w stosi %x
+	ret %r
+}
+
+function l $stosi_l(s %x) {
+@start
+	%r =l stosi %x
+	ret %r
+}
+
+function w $stoui_w(s %x) {
+@start
+	%r =w stoui %x
+	ret %r
+}
+
+function l $stoui_l(s %x) {
+@start
+	%r =l stoui %x
+	ret %r
+}
+
+function w $dtosi_w(d %x) {
+@start
+	%r =w dtosi %x
+	ret %r
+}
+
+function l $dtosi_l(d %x) {
+@start
+	%r =l dtosi %x
+	ret %r
+}
+
+function w $dtoui_w(d %x) {
+@start
+	%r =w dtoui %x
+	ret %r
+}
+
+function l $dtoui_l(d %x) {
+@start
+	%r =l dtoui %x
+	ret %r
+}
+
+export
+function w $test() {
+@start
+	%a =w call $stosi_w(s s_-3.7)
+	%achk =w ceqw %a, -3
+	%b =l call $stosi_l(s s_42.9)
+	%bchk =w ceql %b, 42
+	%c =w call $stoui_w(s s_42.9)
+	%cchk =w ceqw %c, 42
+	%d =l call $stoui_l(s s_100.0)
+	%dchk =w ceql %d, 100
+	%e =w call $dtosi_w(d d_-7.2)
+	%echk =w ceqw %e, -7
+	%f =l call $dtosi_l(d d_100000.9)
+	%fchk =w ceql %f, 100000
+	%g =w call $dtoui_w(d d_42.9)
+	%gchk =w ceqw %g, 42
+	%h =l call $dtoui_l(d d_100000.1)
+	%hchk =w ceql %h, 100000
+	%t0 =w and %achk, %bchk
+	%t1 =w and %t0, %cchk
+	%t2 =w and %t1, %dchk
+	%t3 =w and %t2, %echk
+	%t4 =w and %t3, %fchk
+	%t5 =w and %t4, %gchk
+	%r =w and %t5, %hchk
+	ret %r
+}

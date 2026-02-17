@@ -1,0 +1,58 @@
+# expected: 5 l
+# all i64 arithmetic ops with dynamic operands
+
+function l $addl(l %a, l %b) {
+@start
+	%r =l add %a, %b
+	ret %r
+}
+
+function l $subl(l %a, l %b) {
+@start
+	%r =l sub %a, %b
+	ret %r
+}
+
+function l $mull(l %a, l %b) {
+@start
+	%r =l mul %a, %b
+	ret %r
+}
+
+function l $divl(l %a, l %b) {
+@start
+	%r =l div %a, %b
+	ret %r
+}
+
+function l $udivl(l %a, l %b) {
+@start
+	%r =l udiv %a, %b
+	ret %r
+}
+
+function l $reml(l %a, l %b) {
+@start
+	%r =l rem %a, %b
+	ret %r
+}
+
+function l $ureml(l %a, l %b) {
+@start
+	%r =l urem %a, %b
+	ret %r
+}
+
+export
+function l $test() {
+@start
+	%a =l call $addl(l 10, l 32)
+	%b =l call $subl(l %a, l 12)
+	%c =l call $mull(l %b, l 2)
+	%d =l call $divl(l %c, l 4)
+	%e =l call $udivl(l %d, l 3)
+	%f =l call $reml(l 17, l %e)
+	%g =l call $ureml(l 13, l %e)
+	%r =l add %f, %g
+	ret %r
+}

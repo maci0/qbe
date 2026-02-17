@@ -1,0 +1,19 @@
+# expected: 1 w
+# float to int conversions: stosi, stoui, dtosi, dtoui
+
+export
+function w $test() {
+@start
+	%a =w stosi s_-3.7
+	%achk =w ceqw %a, -3
+	%b =w stoui s_42.9
+	%bchk =w ceqw %b, 42
+	%c =w dtosi d_-7.2
+	%cchk =w ceqw %c, -7
+	%d =l dtosi d_100000.9
+	%dchk =w ceql %d, 100000
+	%t0 =w and %achk, %bchk
+	%t1 =w and %t0, %cchk
+	%r =w and %t1, %dchk
+	ret %r
+}

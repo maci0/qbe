@@ -1,0 +1,18 @@
+# expected: 42 w
+# Jhlt (unreachable) path in dead block
+
+function w $check(w %x) {
+@start
+	jnz %x, @ok, @trap
+@ok
+	ret 42
+@trap
+	hlt
+}
+
+export
+function w $test() {
+@start
+	%r =w call $check(w 1)
+	ret %r
+}

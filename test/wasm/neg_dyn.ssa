@@ -1,0 +1,43 @@
+# expected: 1 w
+# negation for all types with dynamic operands
+
+function w $negw(w %x) {
+@start
+	%r =w neg %x
+	ret %r
+}
+
+function l $negl(l %x) {
+@start
+	%r =l neg %x
+	ret %r
+}
+
+function s $negs(s %x) {
+@start
+	%r =s neg %x
+	ret %r
+}
+
+function d $negd(d %x) {
+@start
+	%r =d neg %x
+	ret %r
+}
+
+export
+function w $test() {
+@start
+	%a =w call $negw(w 42)
+	%achk =w ceqw %a, -42
+	%b =l call $negl(l 100)
+	%bchk =w ceql %b, -100
+	%c =s call $negs(s s_3.0)
+	%cchk =w ceqs %c, s_-3.0
+	%d =d call $negd(d d_7.0)
+	%dchk =w ceqd %d, d_-7.0
+	%t0 =w and %achk, %bchk
+	%t1 =w and %t0, %cchk
+	%r =w and %t1, %dchk
+	ret %r
+}

@@ -1,0 +1,19 @@
+# expected: 1 w
+# i64 comparisons
+
+export
+function w $test() {
+@start
+	%eq =w ceql 100, 100
+	%ne =w cnel 100, 200
+	%slt =w csltl 50, 100
+	%sgt =w csgtl 100, 50
+	%sle =w cslel 100, 100
+	%sge =w csgel 100, 100
+	%t0 =w and %eq, %ne
+	%t1 =w and %t0, %slt
+	%t2 =w and %t1, %sgt
+	%t3 =w and %t2, %sle
+	%r =w and %t3, %sge
+	ret %r
+}

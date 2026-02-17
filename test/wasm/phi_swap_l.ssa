@@ -1,0 +1,14 @@
+# expected: 1 l
+# GCD with i64 phi swap (tests $sw_l swap local)
+
+export
+function l $test() {
+@start
+@loop
+	%a =l phi @start 747, @loop %b
+	%b =l phi @start 380, @loop %r
+	%r =l rem %a, %b
+	jnz %r, @loop, @end
+@end
+	ret %b
+}
