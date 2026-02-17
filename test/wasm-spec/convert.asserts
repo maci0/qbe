@@ -1,0 +1,96 @@
+;; f32 -> f64
+(assert_return (invoke "f32_to_f64" (f32.const 0.0)) (f64.const 0.0))
+(assert_return (invoke "f32_to_f64" (f32.const 1.0)) (f64.const 1.0))
+(assert_return (invoke "f32_to_f64" (f32.const -1.0)) (f64.const -1.0))
+(assert_return (invoke "f32_to_f64" (f32.const 3.14)) (f64.const 3.140000104904175))
+(assert_return (invoke "f32_to_f64" (f32.const inf)) (f64.const inf))
+(assert_return (invoke "f32_to_f64" (f32.const -inf)) (f64.const -inf))
+
+;; f64 -> f32
+(assert_return (invoke "f64_to_f32" (f64.const 0.0)) (f32.const 0.0))
+(assert_return (invoke "f64_to_f32" (f64.const 1.0)) (f32.const 1.0))
+(assert_return (invoke "f64_to_f32" (f64.const -1.0)) (f32.const -1.0))
+(assert_return (invoke "f64_to_f32" (f64.const 0.5)) (f32.const 0.5))
+(assert_return (invoke "f64_to_f32" (f64.const inf)) (f32.const inf))
+
+;; f32 -> i32 signed
+(assert_return (invoke "f32_to_i32_s" (f32.const 0.0)) (i32.const 0))
+(assert_return (invoke "f32_to_i32_s" (f32.const 1.0)) (i32.const 1))
+(assert_return (invoke "f32_to_i32_s" (f32.const -1.0)) (i32.const -1))
+(assert_return (invoke "f32_to_i32_s" (f32.const 3.7)) (i32.const 3))
+(assert_return (invoke "f32_to_i32_s" (f32.const -3.7)) (i32.const -3))
+(assert_return (invoke "f32_to_i32_s" (f32.const 42.0)) (i32.const 42))
+
+;; f32 -> i64 signed
+(assert_return (invoke "f32_to_i64_s" (f32.const 0.0)) (i64.const 0))
+(assert_return (invoke "f32_to_i64_s" (f32.const 42.9)) (i64.const 42))
+(assert_return (invoke "f32_to_i64_s" (f32.const -42.9)) (i64.const -42))
+(assert_return (invoke "f32_to_i64_s" (f32.const 100000.0)) (i64.const 100000))
+
+;; f64 -> i32 signed
+(assert_return (invoke "f64_to_i32_s" (f64.const 0.0)) (i32.const 0))
+(assert_return (invoke "f64_to_i32_s" (f64.const 1.0)) (i32.const 1))
+(assert_return (invoke "f64_to_i32_s" (f64.const -7.2)) (i32.const -7))
+(assert_return (invoke "f64_to_i32_s" (f64.const 42.9)) (i32.const 42))
+
+;; f64 -> i64 signed
+(assert_return (invoke "f64_to_i64_s" (f64.const 0.0)) (i64.const 0))
+(assert_return (invoke "f64_to_i64_s" (f64.const 100000.9)) (i64.const 100000))
+(assert_return (invoke "f64_to_i64_s" (f64.const -100000.9)) (i64.const -100000))
+
+;; f32 -> i32 unsigned
+(assert_return (invoke "f32_to_i32_u" (f32.const 0.0)) (i32.const 0))
+(assert_return (invoke "f32_to_i32_u" (f32.const 1.0)) (i32.const 1))
+(assert_return (invoke "f32_to_i32_u" (f32.const 42.9)) (i32.const 42))
+
+;; f32 -> i64 unsigned
+(assert_return (invoke "f32_to_i64_u" (f32.const 0.0)) (i64.const 0))
+(assert_return (invoke "f32_to_i64_u" (f32.const 100.0)) (i64.const 100))
+
+;; f64 -> i32 unsigned
+(assert_return (invoke "f64_to_i32_u" (f64.const 0.0)) (i32.const 0))
+(assert_return (invoke "f64_to_i32_u" (f64.const 42.9)) (i32.const 42))
+
+;; f64 -> i64 unsigned
+(assert_return (invoke "f64_to_i64_u" (f64.const 0.0)) (i64.const 0))
+(assert_return (invoke "f64_to_i64_u" (f64.const 100000.1)) (i64.const 100000))
+
+;; i32 -> f32 signed
+(assert_return (invoke "i32_to_f32_s" (i32.const 0)) (f32.const 0.0))
+(assert_return (invoke "i32_to_f32_s" (i32.const 1)) (f32.const 1.0))
+(assert_return (invoke "i32_to_f32_s" (i32.const -1)) (f32.const -1.0))
+(assert_return (invoke "i32_to_f32_s" (i32.const 100)) (f32.const 100.0))
+
+;; i32 -> f64 signed
+(assert_return (invoke "i32_to_f64_s" (i32.const 0)) (f64.const 0.0))
+(assert_return (invoke "i32_to_f64_s" (i32.const 1)) (f64.const 1.0))
+(assert_return (invoke "i32_to_f64_s" (i32.const -1)) (f64.const -1.0))
+(assert_return (invoke "i32_to_f64_s" (i32.const 0x7fffffff)) (f64.const 2147483647.0))
+
+;; i64 -> f32 signed
+(assert_return (invoke "i64_to_f32_s" (i64.const 0)) (f32.const 0.0))
+(assert_return (invoke "i64_to_f32_s" (i64.const 1)) (f32.const 1.0))
+(assert_return (invoke "i64_to_f32_s" (i64.const -1)) (f32.const -1.0))
+
+;; i64 -> f64 signed
+(assert_return (invoke "i64_to_f64_s" (i64.const 0)) (f64.const 0.0))
+(assert_return (invoke "i64_to_f64_s" (i64.const 1)) (f64.const 1.0))
+(assert_return (invoke "i64_to_f64_s" (i64.const -1)) (f64.const -1.0))
+
+;; i32 -> f32 unsigned
+(assert_return (invoke "i32_to_f32_u" (i32.const 0)) (f32.const 0.0))
+(assert_return (invoke "i32_to_f32_u" (i32.const 1)) (f32.const 1.0))
+(assert_return (invoke "i32_to_f32_u" (i32.const 100)) (f32.const 100.0))
+
+;; i32 -> f64 unsigned
+(assert_return (invoke "i32_to_f64_u" (i32.const 0)) (f64.const 0.0))
+(assert_return (invoke "i32_to_f64_u" (i32.const 1)) (f64.const 1.0))
+(assert_return (invoke "i32_to_f64_u" (i32.const 0xffffffff)) (f64.const 4294967295.0))
+
+;; i64 -> f32 unsigned
+(assert_return (invoke "i64_to_f32_u" (i64.const 0)) (f32.const 0.0))
+(assert_return (invoke "i64_to_f32_u" (i64.const 1)) (f32.const 1.0))
+
+;; i64 -> f64 unsigned
+(assert_return (invoke "i64_to_f64_u" (i64.const 0)) (f64.const 0.0))
+(assert_return (invoke "i64_to_f64_u" (i64.const 1)) (f64.const 1.0))

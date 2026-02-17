@@ -1,0 +1,49 @@
+function w $helper_add(w %a, w %b) {
+@start
+	%r =w add %a, %b
+	ret %r
+}
+
+export
+function w $call_add(w %x, w %y) {
+@start
+	%r =w call $helper_add(w %x, w %y)
+	ret %r
+}
+
+function w $double(w %x) {
+@start
+	%r =w add %x, %x
+	ret %r
+}
+
+export
+function w $quadruple(w %x) {
+@start
+	%t =w call $double(w %x)
+	%r =w call $double(w %t)
+	ret %r
+}
+
+export
+function l $factorial(l %n) {
+@start
+	%done =w ceql %n, 0
+	jnz %done, @base, @rec
+@base
+	ret 1
+@rec
+	%n1 =l sub %n, 1
+	%sub =l call $factorial(l %n1)
+	%r =l mul %n, %sub
+	ret %r
+}
+
+export
+function w $call_many(w %a, w %b, w %c, w %d) {
+@start
+	%t1 =w add %a, %b
+	%t2 =w add %c, %d
+	%r =w add %t1, %t2
+	ret %r
+}

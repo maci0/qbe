@@ -89,6 +89,9 @@ check-amd64_win: qbe
 check-wasm: qbe
 	test/wasm/run.sh
 
+check-wasm-spec: qbe
+	test/wasm-spec/run.sh
+
 check-cppcheck-wasm:
 	cppcheck -q --std=c99 --error-exitcode=1         \
 		--enable=style,portability                \
@@ -134,5 +137,5 @@ wc:
 	@wc -l $(SRCALL)
 
 .PHONY: clean clean-gen check check-arm64 check-rv64 check-wasm \
-       check-cppcheck-wasm check-scan-wasm check-asan-wasm \
-       src 80 wc install uninstall
+       check-wasm-spec check-cppcheck-wasm check-scan-wasm \
+       check-asan-wasm src 80 wc install uninstall

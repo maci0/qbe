@@ -1,0 +1,125 @@
+export
+function d $f32_to_f64(s %x) {
+@start
+	%r =d exts %x
+	ret %r
+}
+
+export
+function s $f64_to_f32(d %x) {
+@start
+	%r =s truncd %x
+	ret %r
+}
+
+export
+function w $f32_to_i32_s(s %x) {
+@start
+	%r =w stosi %x
+	ret %r
+}
+
+export
+function l $f32_to_i64_s(s %x) {
+@start
+	%r =l stosi %x
+	ret %r
+}
+
+export
+function w $f64_to_i32_s(d %x) {
+@start
+	%r =w dtosi %x
+	ret %r
+}
+
+export
+function l $f64_to_i64_s(d %x) {
+@start
+	%r =l dtosi %x
+	ret %r
+}
+
+export
+function w $f32_to_i32_u(s %x) {
+@start
+	%r =w stoui %x
+	ret %r
+}
+
+export
+function l $f32_to_i64_u(s %x) {
+@start
+	%r =l stoui %x
+	ret %r
+}
+
+export
+function w $f64_to_i32_u(d %x) {
+@start
+	%r =w dtoui %x
+	ret %r
+}
+
+export
+function l $f64_to_i64_u(d %x) {
+@start
+	%r =l dtoui %x
+	ret %r
+}
+
+export
+function s $i32_to_f32_s(w %x) {
+@start
+	%r =s swtof %x
+	ret %r
+}
+
+export
+function d $i32_to_f64_s(w %x) {
+@start
+	%r =d swtof %x
+	ret %r
+}
+
+export
+function s $i64_to_f32_s(l %x) {
+@start
+	%r =s sltof %x
+	ret %r
+}
+
+export
+function d $i64_to_f64_s(l %x) {
+@start
+	%r =d sltof %x
+	ret %r
+}
+
+export
+function s $i32_to_f32_u(w %x) {
+@start
+	%r =s uwtof %x
+	ret %r
+}
+
+export
+function d $i32_to_f64_u(w %x) {
+@start
+	%r =d uwtof %x
+	ret %r
+}
+
+export
+function s $i64_to_f32_u(l %x) {
+@start
+	%r =s ultof %x
+	ret %r
+}
+
+export
+function d $i64_to_f64_u(l %x) {
+@start
+	%r =d ultof %x
+	ret %r
+}

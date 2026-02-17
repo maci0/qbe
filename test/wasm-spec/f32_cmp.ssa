@@ -1,0 +1,55 @@
+export
+function w $eq(s %x, s %y) {
+@start
+	%r =w ceqs %x, %y
+	ret %r
+}
+
+export
+function w $ne(s %x, s %y) {
+@start
+	%r =w cnes %x, %y
+	ret %r
+}
+
+export
+function w $lt(s %x, s %y) {
+@start
+	%r =w clts %x, %y
+	ret %r
+}
+
+export
+function w $le(s %x, s %y) {
+@start
+	%r =w cles %x, %y
+	ret %r
+}
+
+export
+function w $gt(s %x, s %y) {
+@start
+	%r =w cgts %x, %y
+	ret %r
+}
+
+export
+function w $ge(s %x, s %y) {
+@start
+	%r =w cges %x, %y
+	ret %r
+}
+
+export
+function w $ord(s %x, s %y) {
+@start
+	%r =w cos %x, %y
+	ret %r
+}
+
+export
+function w $unord(s %x, s %y) {
+@start
+	%r =w cuos %x, %y
+	ret %r
+}

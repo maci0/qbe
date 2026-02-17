@@ -1,0 +1,27 @@
+export
+function s $i32_to_f32(w %x) {
+@start
+	%r =s cast %x
+	ret %r
+}
+
+export
+function w $f32_to_i32(s %x) {
+@start
+	%r =w cast %x
+	ret %r
+}
+
+export
+function d $i64_to_f64(l %x) {
+@start
+	%r =d cast %x
+	ret %r
+}
+
+export
+function l $f64_to_i64(d %x) {
+@start
+	%r =l cast %x
+	ret %r
+}

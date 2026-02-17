@@ -1,0 +1,48 @@
+export
+function l $add(l %x, l %y) {
+@start
+	%r =l add %x, %y
+	ret %r
+}
+
+export
+function l $sub(l %x, l %y) {
+@start
+	%r =l sub %x, %y
+	ret %r
+}
+
+export
+function l $mul(l %x, l %y) {
+@start
+	%r =l mul %x, %y
+	ret %r
+}
+
+export
+function l $div_s(l %x, l %y) {
+@start
+	%r =l div %x, %y
+	ret %r
+}
+
+export
+function l $div_u(l %x, l %y) {
+@start
+	%r =l udiv %x, %y
+	ret %r
+}
+
+export
+function l $rem_s(l %x, l %y) {
+@start
+	%r =l rem %x, %y
+	ret %r
+}
+
+export
+function l $rem_u(l %x, l %y) {
+@start
+	%r =l urem %x, %y
+	ret %r
+}

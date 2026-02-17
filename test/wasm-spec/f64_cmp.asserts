@@ -1,0 +1,51 @@
+;; eq
+(assert_return (invoke "eq" (f64.const 1.0) (f64.const 1.0)) (i32.const 1))
+(assert_return (invoke "eq" (f64.const 1.0) (f64.const 2.0)) (i32.const 0))
+(assert_return (invoke "eq" (f64.const 0.0) (f64.const -0.0)) (i32.const 1))
+(assert_return (invoke "eq" (f64.const nan) (f64.const nan)) (i32.const 0))
+(assert_return (invoke "eq" (f64.const nan) (f64.const 1.0)) (i32.const 0))
+(assert_return (invoke "eq" (f64.const inf) (f64.const inf)) (i32.const 1))
+
+;; ne
+(assert_return (invoke "ne" (f64.const 1.0) (f64.const 1.0)) (i32.const 0))
+(assert_return (invoke "ne" (f64.const 1.0) (f64.const 2.0)) (i32.const 1))
+(assert_return (invoke "ne" (f64.const nan) (f64.const nan)) (i32.const 1))
+(assert_return (invoke "ne" (f64.const nan) (f64.const 1.0)) (i32.const 1))
+
+;; lt
+(assert_return (invoke "lt" (f64.const 1.0) (f64.const 2.0)) (i32.const 1))
+(assert_return (invoke "lt" (f64.const 2.0) (f64.const 1.0)) (i32.const 0))
+(assert_return (invoke "lt" (f64.const 1.0) (f64.const 1.0)) (i32.const 0))
+(assert_return (invoke "lt" (f64.const nan) (f64.const 1.0)) (i32.const 0))
+(assert_return (invoke "lt" (f64.const -inf) (f64.const inf)) (i32.const 1))
+
+;; le
+(assert_return (invoke "le" (f64.const 1.0) (f64.const 2.0)) (i32.const 1))
+(assert_return (invoke "le" (f64.const 1.0) (f64.const 1.0)) (i32.const 1))
+(assert_return (invoke "le" (f64.const 2.0) (f64.const 1.0)) (i32.const 0))
+(assert_return (invoke "le" (f64.const nan) (f64.const 1.0)) (i32.const 0))
+
+;; gt
+(assert_return (invoke "gt" (f64.const 2.0) (f64.const 1.0)) (i32.const 1))
+(assert_return (invoke "gt" (f64.const 1.0) (f64.const 2.0)) (i32.const 0))
+(assert_return (invoke "gt" (f64.const 1.0) (f64.const 1.0)) (i32.const 0))
+(assert_return (invoke "gt" (f64.const nan) (f64.const 1.0)) (i32.const 0))
+
+;; ge
+(assert_return (invoke "ge" (f64.const 2.0) (f64.const 1.0)) (i32.const 1))
+(assert_return (invoke "ge" (f64.const 1.0) (f64.const 1.0)) (i32.const 1))
+(assert_return (invoke "ge" (f64.const 1.0) (f64.const 2.0)) (i32.const 0))
+(assert_return (invoke "ge" (f64.const nan) (f64.const 1.0)) (i32.const 0))
+
+;; ord (both operands are not NaN)
+(assert_return (invoke "ord" (f64.const 1.0) (f64.const 2.0)) (i32.const 1))
+(assert_return (invoke "ord" (f64.const nan) (f64.const 1.0)) (i32.const 0))
+(assert_return (invoke "ord" (f64.const 1.0) (f64.const nan)) (i32.const 0))
+(assert_return (invoke "ord" (f64.const nan) (f64.const nan)) (i32.const 0))
+(assert_return (invoke "ord" (f64.const inf) (f64.const -inf)) (i32.const 1))
+
+;; unord (at least one operand is NaN)
+(assert_return (invoke "unord" (f64.const 1.0) (f64.const 2.0)) (i32.const 0))
+(assert_return (invoke "unord" (f64.const nan) (f64.const 1.0)) (i32.const 1))
+(assert_return (invoke "unord" (f64.const 1.0) (f64.const nan)) (i32.const 1))
+(assert_return (invoke "unord" (f64.const nan) (f64.const nan)) (i32.const 1))
