@@ -17,7 +17,7 @@ struct Seg {
 
 static int modstarted;
 static int dataoff = DataBase;
-static char databuf[DataMax];
+static uchar databuf[DataMax];
 static int datalen;
 static Seg segs[SegMax];
 static int nseg;
@@ -595,7 +595,7 @@ databyte(int c)
 {
 	if (datalen >= DataMax)
 		die("data section too large");
-	databuf[datalen++] = c;
+	databuf[datalen++] = (uchar)c;
 }
 
 void
@@ -630,12 +630,12 @@ wasm_emitdat(Dat *d, FILE *out)
 	case DZ:
 		for (i=0; i<d->u.num; i++)
 			databyte(0);
-		segoff += d->u.num;
+		segoff += (int)d->u.num;
 		break;
 	case DB:
 		if (d->isstr) {
 			s = d->u.str;
-			len = strlen(s);
+			len = (int)strlen(s);
 			if (len >= 2 && s[0] == '"'
 			&& s[len-1] == '"')
 				for (i=1; i<len-1; i++) {

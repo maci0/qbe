@@ -1,0 +1,27 @@
+# expected: 1 w
+# test DH, DW, DL data directives with known values
+
+data $vals = {
+	h 4660,
+	w 305419896,
+	l 1234605616436508552
+}
+
+export
+function w $test() {
+@start
+	%h =w loaduh $vals
+	%hok =w ceqw %h, 4660
+
+	%pw =l add $vals, 2
+	%w =w load %pw
+	%wok =w ceqw %w, 305419896
+
+	%pl =l add $vals, 6
+	%l =l load %pl
+	%lok =w ceql %l, 1234605616436508552
+
+	%t0 =w and %hok, %wok
+	%r =w and %t0, %lok
+	ret %r
+}
