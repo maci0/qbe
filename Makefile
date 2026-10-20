@@ -84,6 +84,9 @@ check-rv64: qbe
 check-amd64_win: qbe
 	TARGET=amd64_win tools/test.sh all
 
+check-arm64_win: qbe
+	TARGET=arm64_win tools/test.sh all
+
 src:
 	@echo $(SRCALL)
 
@@ -100,4 +103,4 @@ src:
 wc:
 	@wc -l $(SRCALL)
 
-.PHONY: clean clean-gen check check-arm64 check-rv64 check-amd64_win src 80 wc install uninstall
+.PHONY: clean clean-gen check check-arm64 check-rv64 check-amd64_win check-arm64_win src 80 wc install uninstall

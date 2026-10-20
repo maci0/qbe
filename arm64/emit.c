@@ -156,8 +156,10 @@ slot(Ref r, E *e)
 	if (s == -1)
 		return 16 + e->frame;
 	if (s < 0) {
-		if (e->fn->vararg && !T.apple)
+		if (e->fn->vararg && !T.apple && !T.windows)
 			return 16 + e->frame + 192 - (s+2);
+		else if (e->fn->vararg && T.windows)
+			return 16 + e->frame + 64 - (s+2);
 		else
 			return 16 + e->frame - (s+2);
 	} else
@@ -283,6 +285,9 @@ loadaddr(Con *c, char *rn, E *e)
 			die("extern thread unavailable on arm64");
 		/* fall through */
 	case SThr:
+		if (T.windows)
+			die("thread-local storage is not "
+				"supported for arm64_win");
 		if (T.apple)
 			s = "\tadrp\tR, S@tlvppage\n"
 			    "\tldr\tR, [R, S@tlvppageoff]\n";
@@ -393,7 +398,7 @@ emitins(Ins *i, E *e)
 		if (isload(i->op))
 			fixarg(&i->arg[0], loadsz(i), IP1, e);
 		if (isstore(i->op)) {
-			t = T.apple ? -1 : R18;
+			t = (T.apple || T.windows) ? -1 : R18;
 			if (fixarg(&i->arg[1], storesz(i), t, e)) {
 				if (req(i->arg[0], TMP(IP1))) {
 					fprintf(e->f,
@@ -565,8 +570,9 @@ arm64_emitfn(Fn *fn, FILE *out)
 	framelayout(e);
 
 	if (e->fn->vararg && !T.apple) {
-		for (n=7; n>=0; n--)
-			fprintf(e->f, "\tstr\tq%d, [sp, -16]!\n", n);
+		if (!T.windows)
+			for (n=7; n>=0; n--)
+				fprintf(e->f, "\tstr\tq%d, [sp, -16]!\n", n);
 		for (n=7; n>=0; n-=2)
 			fprintf(e->f, "\tstp\tx%d, x%d, [sp, -16]!\n", n-1, n);
 	}
@@ -629,8 +635,12 @@ arm64_emitfn(Fn *fn, FILE *out)
 			if (e->fn->dynalloc)
 				fputs("\tmov sp, x29\n", e->f);
 			o = e->frame + 16;
-			if (e->fn->vararg && !T.apple)
-				o += 192;
+			if (e->fn->vararg && !T.apple) {
+				if (T.windows)
+					o += 64;
+				else
+					o += 192;
+			}
 			if (o <= 504)
 				fprintf(e->f,
 					"\tldp\tx29, x30, [sp], %"PRIu64"\n",
@@ -688,6 +698,6 @@ arm64_emitfn(Fn *fn, FILE *out)
 		}
 	}
 	id0 += e->fn->nblk;
-	if (!T.apple)
+	if (!T.apple && !T.windows)
 		elf_emitfnfin(fn->name, out);
 }
