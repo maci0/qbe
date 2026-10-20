@@ -1,0 +1,62 @@
+# expected: 1 w
+# Exercise two reduced multiplies, a zero-trip loop, and a pointer induction.
+
+data $values = { w 11, w 22, w 33, w 44 }
+
+function w $products(w %n, w %a, w %b) {
+@start
+	jmp @head
+@head
+	%i =w phi @start 0, @body %next
+	%s =w phi @start 0, @body %total
+	%c =w csltw %i, %n
+	jnz %c, @body, @done
+@body
+	%x =w mul %i, %a
+	%y =w mul %i, %b
+	%xy =w add %x, %y
+	%total =w add %s, %xy
+	%next =w add %i, 1
+	jmp @head
+@done
+	ret %s
+}
+
+function w $array(l %base) {
+@start
+	jmp @body
+@body
+	%offset =l phi @start 0, @body %nextoff
+	%count =w phi @start 0, @body %nextcount
+	%s =w phi @start 0, @body %total
+	%p =l add %base, %offset
+	%v =w load %p
+	%total =w add %s, %v
+	%nextoff =l add %offset, 4
+	%nextcount =w add %count, 1
+	%c =w csltw %nextcount, 4
+	jnz %c, @body, @done
+@done
+	ret %total
+}
+
+export function w $test() {
+@start
+	%a =w call $products(w 8, w 3, w 7)
+	%b =w call $products(w 0, w 3, w 7)
+	%c =w call $products(w 5, w -9, w 2)
+	%d =w call $array(l $values)
+	%ca =w ceqw %a, 280
+	%cb =w ceqw %b, 0
+	%cc =w ceqw %c, -70
+	%cd =w ceqw %d, 110
+	%ab =w and %ca, %cb
+	%abc =w and %ab, %cc
+	%all =w and %abc, %cd
+	ret %all
+}
+
+# >>> driver
+# extern int test(void);
+# int main(void) { return test() != 1; }
+# <<<
