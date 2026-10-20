@@ -1,0 +1,25 @@
+# expected: 42
+export
+function w $test() {
+@start
+	%a =l copy 100000000000
+	%b =l copy 200000000000
+	%c =l add %a, %b
+	%c.1 =l shr %c, 32
+	
+	%d =l copy 1
+	%e =l copy 63
+	%f =l shl %d, %e
+	%g =l sar %f, 63
+	
+	%x =l copy 96
+	%h =l and %g, %x
+	%i =l sub %h, %c.1
+	
+	%j =l copy 15
+	%k =l or %i, %j
+	%l =l xor %k, 53
+
+	%r =w copy %l
+	ret %r
+}

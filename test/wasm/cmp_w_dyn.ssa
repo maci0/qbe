@@ -1,0 +1,33 @@
+# expected: 1 w
+# all 10 i32 comparisons with dynamic operands
+
+function w $cmps(w %a, w %b, w %c) {
+@start
+	%eq =w ceqw %a, %c
+	%ne =w cnew %a, %b
+	%slt =w csltw %a, %b
+	%sgt =w csgtw %b, %a
+	%sle =w cslew %a, %c
+	%sge =w csgew %c, %a
+	%ult =w cultw %a, %b
+	%ugt =w cugtw %b, %a
+	%ule =w culew %a, %b
+	%uge =w cugew %b, %a
+	%t0 =w and %eq, %ne
+	%t1 =w and %t0, %slt
+	%t2 =w and %t1, %sgt
+	%t3 =w and %t2, %sle
+	%t4 =w and %t3, %sge
+	%t5 =w and %t4, %ult
+	%t6 =w and %t5, %ugt
+	%t7 =w and %t6, %ule
+	%r =w and %t7, %uge
+	ret %r
+}
+
+export
+function w $test() {
+@start
+	%r =w call $cmps(w 3, w 5, w 3)
+	ret %r
+}

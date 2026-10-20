@@ -1,0 +1,19 @@
+# expected: 1
+# shl, shr (logical), sar (arithmetic)
+
+export
+function w $test() {
+@start
+	%a =w shl 1, 10
+	# 1 << 10 = 1024
+	%b =w shr 1024, 5
+	# 1024 >> 5 = 32 (logical)
+	%c =w sar -128, 2
+	# -128 >> 2 = -32 (arithmetic, sign-extends)
+	%d =w add %b, %c
+	# 32 + (-32) = 0
+	%e =w ceqw %a, 1024
+	%f =w ceqw %d, 0
+	%r =w and %e, %f
+	ret %r
+}

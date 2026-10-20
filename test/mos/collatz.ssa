@@ -1,0 +1,24 @@
+# expected: 1
+# collatz sequence from 27 must reach 1
+
+export
+function w $test() {
+@start
+	jmp @loop
+@loop
+	%n =w phi @start 27, @odd %n3, @even %n2
+	%c =w ceqw %n, 1
+	jnz %c, @done, @step
+@step
+	%r =w rem %n, 2
+	jnz %r, @odd, @even
+@odd
+	%t =w mul %n, 3
+	%n3 =w add %t, 1
+	jmp @loop
+@even
+	%n2 =w div %n, 2
+	jmp @loop
+@done
+	ret 1
+}

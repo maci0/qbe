@@ -1,0 +1,14 @@
+# expected: 1 w
+# f32 <-> f64 conversion
+
+export
+function w $test() {
+@start
+	%a =d exts s_3.14
+	%b =s truncd d_2.718
+	%c =d exts %b
+	%achk =w cgtd %a, d_3.13
+	%cchk =w cgtd %c, d_2.71
+	%r =w and %achk, %cchk
+	ret %r
+}

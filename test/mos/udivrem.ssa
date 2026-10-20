@@ -1,0 +1,14 @@
+# expected: 7
+# unsigned division and remainder
+
+export
+function w $test() {
+@start
+	# 255 / 50 = 5, 255 % 50 = 5; 5 + 5 = 10
+	# then subtract 3 = 7
+	%d =w udiv 255, 50
+	%m =w urem 255, 50
+	%s =w add %d, %m
+	%r =w sub %s, 3
+	ret %r
+}

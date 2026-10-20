@@ -1,0 +1,26 @@
+# expected: 1 w
+# i32 signed and unsigned comparisons
+
+export
+function w $test() {
+@start
+	%eq =w ceqw 5, 5
+	%ne =w cnew 5, 6
+	%slt =w csltw 3, 5
+	%sgt =w csgtw 5, 3
+	%sle =w cslew 5, 5
+	%sge =w csgew 5, 5
+	%ult =w cultw 3, 5
+	%ugt =w cugtw 5, 3
+	# -1 as unsigned is 0xffffffff, bigger than 5
+	%ugt2 =w cugtw -1, 5
+	%t0 =w and %eq, %ne
+	%t1 =w and %t0, %slt
+	%t2 =w and %t1, %sgt
+	%t3 =w and %t2, %sle
+	%t4 =w and %t3, %sge
+	%t5 =w and %t4, %ult
+	%t6 =w and %t5, %ugt
+	%r =w and %t6, %ugt2
+	ret %r
+}

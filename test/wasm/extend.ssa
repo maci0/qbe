@@ -1,0 +1,41 @@
+export
+function w $extsb(w %x) {
+@start
+	%r =w extsb %x
+	ret %r
+}
+
+export
+function w $extsh(w %x) {
+@start
+	%r =w extsh %x
+	ret %r
+}
+
+export
+function w $extub(w %x) {
+@start
+	%r =w extub %x
+	ret %r
+}
+
+export
+function w $extuh(w %x) {
+@start
+	%r =w extuh %x
+	ret %r
+}
+
+export
+function l $extsw(w %x) {
+@start
+	%r =l extsw %x
+	ret %r
+}
+
+export
+function l $extuw(w %x) {
+@start
+	%r =l extuw %x
+	ret %r
+}

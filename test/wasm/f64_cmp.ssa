@@ -1,0 +1,55 @@
+export
+function w $eq(d %x, d %y) {
+@start
+	%r =w ceqd %x, %y
+	ret %r
+}
+
+export
+function w $ne(d %x, d %y) {
+@start
+	%r =w cned %x, %y
+	ret %r
+}
+
+export
+function w $lt(d %x, d %y) {
+@start
+	%r =w cltd %x, %y
+	ret %r
+}
+
+export
+function w $le(d %x, d %y) {
+@start
+	%r =w cled %x, %y
+	ret %r
+}
+
+export
+function w $gt(d %x, d %y) {
+@start
+	%r =w cgtd %x, %y
+	ret %r
+}
+
+export
+function w $ge(d %x, d %y) {
+@start
+	%r =w cged %x, %y
+	ret %r
+}
+
+export
+function w $ord(d %x, d %y) {
+@start
+	%r =w cod %x, %y
+	ret %r
+}
+
+export
+function w $unord(d %x, d %y) {
+@start
+	%r =w cuod %x, %y
+	ret %r
+}

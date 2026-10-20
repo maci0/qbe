@@ -1,0 +1,22 @@
+# expected: 200
+# sign/zero extension round-trip
+
+export
+function w $test() {
+@start
+	%p =l alloc4 8
+
+	# store -56 as a byte (200 unsigned)
+	storeb 200, %p
+
+	# load as signed byte => -56
+	%sb =w loadsb %p
+	# load as unsigned byte => 200
+	%ub =w loadub %p
+
+	# -56 + 200 = 144, then + 56 = 200
+	%sum =w add %sb, %ub
+	%neg =w sub 0, %sb
+	%r =w add %sum, %neg
+	ret %r
+}

@@ -1,0 +1,29 @@
+# expected: 42 w
+# function with multiple return paths
+
+function w $classify(w %n) {
+@start
+	%neg =w csltw %n, 0
+	jnz %neg, @retneg, @pos
+@pos
+	%big =w csgtw %n, 100
+	jnz %big, @retbig, @med
+@med
+	%eq =w ceqw %n, 50
+	jnz %eq, @retmid, @retdef
+@retneg
+	ret -1
+@retbig
+	ret 1
+@retmid
+	ret 42
+@retdef
+	ret 0
+}
+
+export
+function w $test() {
+@start
+	%r =w call $classify(w 50)
+	ret %r
+}

@@ -1,0 +1,16 @@
+# expected: 1 w
+# function calls with float args and return
+
+function d $dadd(d %a, d %b) {
+@start
+	%r =d add %a, %b
+	ret %r
+}
+
+export
+function w $test() {
+@start
+	%v =d call $dadd(d d_1.5, d d_2.5)
+	%r =w ceqd %v, d_4.0
+	ret %r
+}

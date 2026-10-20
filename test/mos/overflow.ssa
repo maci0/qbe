@@ -1,0 +1,13 @@
+# expected: 1
+# integer overflow wraps correctly
+
+export
+function w $test() {
+@start
+	%a =w add 2147483647, 1
+	%achk =w ceqw %a, -2147483648
+	%b =w sub -2147483648, 1
+	%bchk =w ceqw %b, 2147483647
+	%r =w and %achk, %bchk
+	ret %r
+}

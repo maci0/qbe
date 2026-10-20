@@ -1,0 +1,61 @@
+# expected: 1 w
+# all extension ops with dynamic operands
+
+function w $fextsb(w %x) {
+@start
+	%r =w extsb %x
+	ret %r
+}
+
+function w $fextub(w %x) {
+@start
+	%r =w extub %x
+	ret %r
+}
+
+function w $fextsh(w %x) {
+@start
+	%r =w extsh %x
+	ret %r
+}
+
+function w $fextuh(w %x) {
+@start
+	%r =w extuh %x
+	ret %r
+}
+
+function l $fextsw(w %x) {
+@start
+	%r =l extsw %x
+	ret %r
+}
+
+function l $fextuw(w %x) {
+@start
+	%r =l extuw %x
+	ret %r
+}
+
+export
+function w $test() {
+@start
+	%a =w call $fextsb(w 200)
+	%achk =w ceqw %a, -56
+	%b =w call $fextub(w 200)
+	%bchk =w ceqw %b, 200
+	%c =w call $fextsh(w 50000)
+	%cchk =w ceqw %c, -15536
+	%d =w call $fextuh(w 50000)
+	%dchk =w ceqw %d, 50000
+	%e =l call $fextsw(w -1)
+	%echk =w ceql %e, -1
+	%f =l call $fextuw(w -1)
+	%fchk =w ceql %f, 4294967295
+	%t0 =w and %achk, %bchk
+	%t1 =w and %t0, %cchk
+	%t2 =w and %t1, %dchk
+	%t3 =w and %t2, %echk
+	%r =w and %t3, %fchk
+	ret %r
+}

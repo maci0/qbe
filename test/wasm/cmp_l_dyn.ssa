@@ -1,0 +1,33 @@
+# expected: 1 w
+# all 10 i64 comparisons with dynamic operands
+
+function w $cmpl(l %a, l %b, l %c) {
+@start
+	%eq =w ceql %a, %c
+	%ne =w cnel %a, %b
+	%slt =w csltl %a, %b
+	%sgt =w csgtl %b, %a
+	%sle =w cslel %a, %c
+	%sge =w csgel %c, %a
+	%ult =w cultl %a, %b
+	%ugt =w cugtl %b, %a
+	%ule =w culel %a, %b
+	%uge =w cugel %b, %a
+	%t0 =w and %eq, %ne
+	%t1 =w and %t0, %slt
+	%t2 =w and %t1, %sgt
+	%t3 =w and %t2, %sle
+	%t4 =w and %t3, %sge
+	%t5 =w and %t4, %ult
+	%t6 =w and %t5, %ugt
+	%t7 =w and %t6, %ule
+	%r =w and %t7, %uge
+	ret %r
+}
+
+export
+function w $test() {
+@start
+	%r =w call $cmpl(l 3, l 5, l 3)
+	ret %r
+}

@@ -1,0 +1,30 @@
+;; i32 -> f32 (bitwise reinterpret)
+;; 0x3f800000 = 1065353216 = f32 1.0
+(assert_return (invoke "i32_to_f32" (i32.const 1065353216)) (f32.const 1.0))
+;; 0x00000000 = f32 0.0
+(assert_return (invoke "i32_to_f32" (i32.const 0)) (f32.const 0.0))
+;; 0xbf800000 = -1082130432 = f32 -1.0
+(assert_return (invoke "i32_to_f32" (i32.const -1082130432)) (f32.const -1.0))
+;; 0x7f800000 = 2139095040 = f32 +inf
+(assert_return (invoke "i32_to_f32" (i32.const 2139095040)) (f32.const inf))
+;; 0x80000000 = -2147483648 = f32 -0.0
+(assert_return (invoke "i32_to_f32" (i32.const -2147483648)) (f32.const -0.0))
+
+;; f32 -> i32 (bitwise reinterpret)
+(assert_return (invoke "f32_to_i32" (f32.const 1.0)) (i32.const 1065353216))
+(assert_return (invoke "f32_to_i32" (f32.const 0.0)) (i32.const 0))
+(assert_return (invoke "f32_to_i32" (f32.const -1.0)) (i32.const -1082130432))
+(assert_return (invoke "f32_to_i32" (f32.const inf)) (i32.const 2139095040))
+
+;; i64 -> f64 (bitwise reinterpret)
+;; 0x3ff0000000000000 = 4607182418800017408 = f64 1.0
+(assert_return (invoke "i64_to_f64" (i64.const 4607182418800017408)) (f64.const 1.0))
+;; 0x0000000000000000 = f64 0.0
+(assert_return (invoke "i64_to_f64" (i64.const 0)) (f64.const 0.0))
+;; 0xbff0000000000000 = -4616189618054758400 = f64 -1.0
+(assert_return (invoke "i64_to_f64" (i64.const -4616189618054758400)) (f64.const -1.0))
+
+;; f64 -> i64 (bitwise reinterpret)
+(assert_return (invoke "f64_to_i64" (f64.const 1.0)) (i64.const 4607182418800017408))
+(assert_return (invoke "f64_to_i64" (f64.const 0.0)) (i64.const 0))
+(assert_return (invoke "f64_to_i64" (f64.const -1.0)) (i64.const -4616189618054758400))

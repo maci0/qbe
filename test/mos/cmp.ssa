@@ -1,0 +1,9 @@
+# expected: 1
+# comparisons: 3 < 5 == 1
+
+export
+function w $test() {
+@start
+	%r =w csltw 3, 5
+	ret %r
+}

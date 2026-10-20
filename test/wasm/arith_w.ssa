@@ -1,0 +1,12 @@
+# expected: 7 w
+# i32 arithmetic: ((10 + 3) * 2 - 5) / 3 = 7
+
+export
+function w $test() {
+@start
+	%a =w add 10, 3
+	%b =w mul %a, 2
+	%c =w sub %b, 5
+	%d =w div %c, 3
+	ret %d
+}

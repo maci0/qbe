@@ -10,7 +10,9 @@ COMMOBJ  = main.o util.o parse.o abi.o cfg.o mem.o ssa.o alias.o load.o \
 AMD64OBJ = amd64/targ.o amd64/sysv.o amd64/isel.o amd64/emit.o amd64/winabi.o
 ARM64OBJ = arm64/targ.o arm64/abi.o arm64/isel.o arm64/emit.o
 RV64OBJ  = rv64/targ.o rv64/abi.o rv64/isel.o rv64/emit.o
-OBJ      = $(COMMOBJ) $(AMD64OBJ) $(ARM64OBJ) $(RV64OBJ)
+WASMOBJ  = wasm/targ.o wasm/abi.o wasm/isel.o wasm/emit.o
+MOSOBJ   = mos/targ.o mos/abi.o mos/isel.o mos/emit.o
+OBJ      = $(COMMOBJ) $(AMD64OBJ) $(ARM64OBJ) $(RV64OBJ) $(WASMOBJ) $(MOSOBJ)
 
 SRCALL   = $(OBJ:.o=.c)
 
@@ -27,6 +29,8 @@ $(OBJ): all.h ops.h
 $(AMD64OBJ): amd64/all.h
 $(ARM64OBJ): arm64/all.h
 $(RV64OBJ): rv64/all.h
+$(WASMOBJ): wasm/all.h
+$(MOSOBJ): mos/all.h
 main.o: config.h
 
 config.h:
@@ -87,6 +91,43 @@ check-amd64_win: qbe
 check-arm64_win: qbe
 	TARGET=arm64_win tools/test.sh all
 
+check-wasm: qbe
+	test/wasm/run.sh
+
+check-mos: check check-wasm
+	test/mos/run.sh
+
+check-wasm-native: qbe
+	test/wasm/run_native.sh
+
+check-cppcheck-wasm:
+	cppcheck -q --std=c99 --error-exitcode=1         \
+		--enable=style,portability                \
+		--suppress=missingIncludeSystem            \
+		--suppress=variableScope                  \
+		--suppress=constVariablePointer            \
+		--suppress=constParameterPointer           \
+		-I. wasm/emit.c wasm/abi.c                \
+		wasm/isel.c wasm/targ.c
+
+check-scan-wasm:
+	@for f in wasm/emit.c wasm/abi.c                  \
+		wasm/isel.c wasm/targ.c;                  \
+	do                                                \
+		echo "scan-build: $$f";                   \
+		scan-build --status-bugs                  \
+			$(CC) $(CFLAGS) -c $$f            \
+			-o /dev/null || exit 1;           \
+	done
+
+check-asan-wasm: config.h
+	$(CC) $(CFLAGS) -fsanitize=address,undefined      \
+		-fno-omit-frame-pointer $(SRCALL)         \
+		-o qbe.asan
+	ASAN_OPTIONS=detect_leaks=0 bin=./qbe.asan        \
+		test/wasm/run.sh;                         \
+	rc=$$?; rm -f qbe.asan; exit $$rc
+
 src:
 	@echo $(SRCALL)
 
@@ -103,4 +144,6 @@ src:
 wc:
 	@wc -l $(SRCALL)
 
-.PHONY: clean clean-gen check check-arm64 check-rv64 check-amd64_win check-arm64_win src 80 wc install uninstall
+.PHONY: clean clean-gen check check-arm64 check-rv64 check-amd64_win check-arm64_win check-wasm \
+       check-wasm-native check-cppcheck-wasm check-scan-wasm \
+       check-asan-wasm check-mos src 80 wc install uninstall

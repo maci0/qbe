@@ -1,0 +1,14 @@
+# expected: 1
+# bitwise and, or, xor comprehensive
+
+export
+function w $test() {
+@start
+	%a =w and 255, 15
+	%b =w or 48, 3
+	%c =w xor 255, 240
+	%d =w add %a, %c
+	%e =w sub %b, %d
+	%r =w ceqw %e, 21
+	ret %r
+}

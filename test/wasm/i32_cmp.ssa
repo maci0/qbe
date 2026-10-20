@@ -1,0 +1,69 @@
+export
+function w $eq(w %x, w %y) {
+@start
+	%r =w ceqw %x, %y
+	ret %r
+}
+
+export
+function w $ne(w %x, w %y) {
+@start
+	%r =w cnew %x, %y
+	ret %r
+}
+
+export
+function w $lt_s(w %x, w %y) {
+@start
+	%r =w csltw %x, %y
+	ret %r
+}
+
+export
+function w $le_s(w %x, w %y) {
+@start
+	%r =w cslew %x, %y
+	ret %r
+}
+
+export
+function w $gt_s(w %x, w %y) {
+@start
+	%r =w csgtw %x, %y
+	ret %r
+}
+
+export
+function w $ge_s(w %x, w %y) {
+@start
+	%r =w csgew %x, %y
+	ret %r
+}
+
+export
+function w $lt_u(w %x, w %y) {
+@start
+	%r =w cultw %x, %y
+	ret %r
+}
+
+export
+function w $le_u(w %x, w %y) {
+@start
+	%r =w culew %x, %y
+	ret %r
+}
+
+export
+function w $gt_u(w %x, w %y) {
+@start
+	%r =w cugtw %x, %y
+	ret %r
+}
+
+export
+function w $ge_u(w %x, w %y) {
+@start
+	%r =w cugew %x, %y
+	ret %r
+}

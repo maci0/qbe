@@ -1,0 +1,29 @@
+# expected: 1 w
+# phi swap with f64 values (tests $sw_d swap local)
+# computes fibonacci ratio via repeated division:
+# a=5, b=8 -> a=b=8, b=a+b_old=13 -> etc for n steps
+# then checks b/a approaches golden ratio
+
+function d $fib5(d %a, d %b) {
+@start
+	jmp @loop
+@loop
+	%x =d phi @start %a, @loop %y
+	%y =d phi @start %b, @loop %s
+	%s =d add %x, %y
+	%c =w cgtd %s, d_100.0
+	jnz %c, @done, @loop
+@done
+	%r =d div %y, %x
+	ret %r
+}
+
+export
+function w $test() {
+@start
+	%v =d call $fib5(d d_1.0, d d_1.0)
+	%lo =w cgtd %v, d_1.6
+	%hi =w cltd %v, d_1.7
+	%r =w and %lo, %hi
+	ret %r
+}

@@ -1,0 +1,18 @@
+# expected: 55 w
+# multiple phi nodes in a loop: fibonacci via phi
+
+export
+function w $test() {
+@start
+	jmp @loop
+@loop
+	%a =w phi @start 0, @loop %b
+	%b =w phi @start 1, @loop %c
+	%i =w phi @start 0, @loop %i1
+	%c =w add %a, %b
+	%i1 =w add %i, 1
+	%done =w ceqw %i1, 10
+	jnz %done, @end, @loop
+@end
+	ret %b
+}

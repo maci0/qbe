@@ -1,0 +1,48 @@
+export
+function w $add(w %x, w %y) {
+@start
+	%r =w add %x, %y
+	ret %r
+}
+
+export
+function w $sub(w %x, w %y) {
+@start
+	%r =w sub %x, %y
+	ret %r
+}
+
+export
+function w $mul(w %x, w %y) {
+@start
+	%r =w mul %x, %y
+	ret %r
+}
+
+export
+function w $div_s(w %x, w %y) {
+@start
+	%r =w div %x, %y
+	ret %r
+}
+
+export
+function w $div_u(w %x, w %y) {
+@start
+	%r =w udiv %x, %y
+	ret %r
+}
+
+export
+function w $rem_s(w %x, w %y) {
+@start
+	%r =w rem %x, %y
+	ret %r
+}
+
+export
+function w $rem_u(w %x, w %y) {
+@start
+	%r =w urem %x, %y
+	ret %r
+}

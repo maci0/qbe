@@ -1,0 +1,21 @@
+# expected: 1 w
+# function taking all 4 param types (w, l, s, d)
+
+function w $check(w %w, l %l, s %s, d %d) {
+@start
+	%wchk =w ceqw %w, 10
+	%lchk =w ceql %l, 20
+	%schk =w ceqs %s, s_3.0
+	%dchk =w ceqd %d, d_4.0
+	%t0 =w and %wchk, %lchk
+	%t1 =w and %t0, %schk
+	%r =w and %t1, %dchk
+	ret %r
+}
+
+export
+function w $test() {
+@start
+	%r =w call $check(w 10, l 20, s s_3.0, d d_4.0)
+	ret %r
+}

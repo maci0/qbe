@@ -1,0 +1,21 @@
+# expected: 1
+# test alloc8 and alloc16 alignment
+
+export function w $test() {
+@start
+  # alloc16 should return 16-byte aligned address
+  %p16 =l alloc16 20
+  %a16 =w copy %p16
+  %m16 =w urem %a16, 16
+  %ok16 =w ceqw %m16, 0
+
+  # alloc8 should return 8-byte aligned address
+  %p8 =l alloc8 12
+  %a8 =w copy %p8
+  %m8 =w urem %a8, 8
+  %ok8 =w ceqw %m8, 0
+
+  # both must be aligned
+  %r =w and %ok16, %ok8
+  ret %r
+}

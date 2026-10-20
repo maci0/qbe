@@ -1,0 +1,32 @@
+# expected: 1 w
+# string with escape sequences: \n \t \0 \\
+
+data $str = { b "A\n\t\\\0B", b 0 }
+
+export
+function w $test() {
+@start
+	%c0 =w loadub $str
+	%chk0 =w ceqw %c0, 65
+	%p1 =l add $str, 1
+	%c1 =w loadub %p1
+	%chk1 =w ceqw %c1, 10
+	%p2 =l add $str, 2
+	%c2 =w loadub %p2
+	%chk2 =w ceqw %c2, 9
+	%p3 =l add $str, 3
+	%c3 =w loadub %p3
+	%chk3 =w ceqw %c3, 92
+	%p4 =l add $str, 4
+	%c4 =w loadub %p4
+	%chk4 =w ceqw %c4, 0
+	%p5 =l add $str, 5
+	%c5 =w loadub %p5
+	%chk5 =w ceqw %c5, 66
+	%t0 =w and %chk0, %chk1
+	%t1 =w and %t0, %chk2
+	%t2 =w and %t1, %chk3
+	%t3 =w and %t2, %chk4
+	%r =w and %t3, %chk5
+	ret %r
+}

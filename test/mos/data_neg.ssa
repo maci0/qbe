@@ -1,0 +1,12 @@
+# expected: 1
+# test negative data values in .dword
+
+data $neg = { w 4294967196 }
+
+export function w $test() {
+@start
+  %v =w load $neg
+  # 4294967196 = 0xFFFFFF9C = -100 as signed
+  %r =w ceqw %v, -100
+  ret %r
+}

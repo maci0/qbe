@@ -1,0 +1,57 @@
+;; eq
+(assert_return (invoke "eq" (i64.const 0) (i64.const 0)) (i32.const 1))
+(assert_return (invoke "eq" (i64.const 1) (i64.const 1)) (i32.const 1))
+(assert_return (invoke "eq" (i64.const -1) (i64.const 1)) (i32.const 0))
+(assert_return (invoke "eq" (i64.const 0x8000000000000000) (i64.const 0x8000000000000000)) (i32.const 1))
+(assert_return (invoke "eq" (i64.const 0x100000000) (i64.const 0x100000000)) (i32.const 1))
+
+;; ne
+(assert_return (invoke "ne" (i64.const 0) (i64.const 0)) (i32.const 0))
+(assert_return (invoke "ne" (i64.const -1) (i64.const 1)) (i32.const 1))
+(assert_return (invoke "ne" (i64.const 1) (i64.const 0)) (i32.const 1))
+(assert_return (invoke "ne" (i64.const 0x100000000) (i64.const 0)) (i32.const 1))
+
+;; lt_s
+(assert_return (invoke "lt_s" (i64.const 0) (i64.const 0)) (i32.const 0))
+(assert_return (invoke "lt_s" (i64.const -1) (i64.const 1)) (i32.const 1))
+(assert_return (invoke "lt_s" (i64.const 0x8000000000000000) (i64.const 0)) (i32.const 1))
+(assert_return (invoke "lt_s" (i64.const 0) (i64.const 0x8000000000000000)) (i32.const 0))
+(assert_return (invoke "lt_s" (i64.const 0x8000000000000000) (i64.const 0x7fffffffffffffff)) (i32.const 1))
+
+;; le_s
+(assert_return (invoke "le_s" (i64.const 0) (i64.const 0)) (i32.const 1))
+(assert_return (invoke "le_s" (i64.const -1) (i64.const 1)) (i32.const 1))
+(assert_return (invoke "le_s" (i64.const 1) (i64.const 0)) (i32.const 0))
+(assert_return (invoke "le_s" (i64.const 0x8000000000000000) (i64.const 0x8000000000000000)) (i32.const 1))
+
+;; gt_s
+(assert_return (invoke "gt_s" (i64.const 0) (i64.const 0)) (i32.const 0))
+(assert_return (invoke "gt_s" (i64.const 1) (i64.const -1)) (i32.const 1))
+(assert_return (invoke "gt_s" (i64.const 0) (i64.const 0x8000000000000000)) (i32.const 1))
+(assert_return (invoke "gt_s" (i64.const 0x7fffffffffffffff) (i64.const 0x8000000000000000)) (i32.const 1))
+
+;; ge_s
+(assert_return (invoke "ge_s" (i64.const 0) (i64.const 0)) (i32.const 1))
+(assert_return (invoke "ge_s" (i64.const 1) (i64.const 0)) (i32.const 1))
+(assert_return (invoke "ge_s" (i64.const 0) (i64.const 1)) (i32.const 0))
+
+;; lt_u
+(assert_return (invoke "lt_u" (i64.const 0) (i64.const 0)) (i32.const 0))
+(assert_return (invoke "lt_u" (i64.const -1) (i64.const 1)) (i32.const 0))
+(assert_return (invoke "lt_u" (i64.const 0) (i64.const 0x8000000000000000)) (i32.const 1))
+(assert_return (invoke "lt_u" (i64.const 0x7fffffffffffffff) (i64.const 0x8000000000000000)) (i32.const 1))
+
+;; le_u
+(assert_return (invoke "le_u" (i64.const 0) (i64.const 0)) (i32.const 1))
+(assert_return (invoke "le_u" (i64.const -1) (i64.const 1)) (i32.const 0))
+(assert_return (invoke "le_u" (i64.const 0x8000000000000000) (i64.const -1)) (i32.const 1))
+
+;; gt_u
+(assert_return (invoke "gt_u" (i64.const 0) (i64.const 0)) (i32.const 0))
+(assert_return (invoke "gt_u" (i64.const -1) (i64.const 1)) (i32.const 1))
+(assert_return (invoke "gt_u" (i64.const 0x8000000000000000) (i64.const 0x7fffffffffffffff)) (i32.const 1))
+
+;; ge_u
+(assert_return (invoke "ge_u" (i64.const 0) (i64.const 0)) (i32.const 1))
+(assert_return (invoke "ge_u" (i64.const -1) (i64.const 1)) (i32.const 1))
+(assert_return (invoke "ge_u" (i64.const 0) (i64.const 1)) (i32.const 0))

@@ -1,0 +1,31 @@
+# expected: 1 w
+# i64 constants at extreme boundaries
+
+function l $max(l %dummy) {
+@start
+	ret 9223372036854775807
+}
+
+function l $min(l %dummy) {
+@start
+	ret -9223372036854775808
+}
+
+function l $neg1(l %dummy) {
+@start
+	ret -1
+}
+
+export
+function w $test() {
+@start
+	%a =l call $max(l 0)
+	%achk =w ceql %a, 9223372036854775807
+	%b =l call $min(l 0)
+	%bchk =w ceql %b, -9223372036854775808
+	%c =l call $neg1(l 0)
+	%cchk =w ceql %c, -1
+	%t0 =w and %achk, %bchk
+	%r =w and %t0, %cchk
+	ret %r
+}

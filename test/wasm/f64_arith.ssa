@@ -1,0 +1,27 @@
+export
+function d $add(d %x, d %y) {
+@start
+	%r =d add %x, %y
+	ret %r
+}
+
+export
+function d $sub(d %x, d %y) {
+@start
+	%r =d sub %x, %y
+	ret %r
+}
+
+export
+function d $mul(d %x, d %y) {
+@start
+	%r =d mul %x, %y
+	ret %r
+}
+
+export
+function d $div(d %x, d %y) {
+@start
+	%r =d div %x, %y
+	ret %r
+}

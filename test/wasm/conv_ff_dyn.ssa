@@ -1,0 +1,25 @@
+# expected: 1 w
+# f32<->f64 promotion/demotion with dynamic operands
+
+function d $fexts(s %x) {
+@start
+	%r =d exts %x
+	ret %r
+}
+
+function s $ftruncd(d %x) {
+@start
+	%r =s truncd %x
+	ret %r
+}
+
+export
+function w $test() {
+@start
+	%a =d call $fexts(s s_3.0)
+	%achk =w ceqd %a, d_3.0
+	%b =s call $ftruncd(d d_7.0)
+	%bchk =w ceqs %b, s_7.0
+	%r =w and %achk, %bchk
+	ret %r
+}

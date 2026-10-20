@@ -1,0 +1,16 @@
+# expected: 1 w
+# signed loads sign-extend correctly
+
+data $sb = { b 200 }
+data $sh = { h 50000 }
+
+export
+function w $test() {
+@start
+	%bv =w loadsb $sb
+	%bchk =w ceqw %bv, -56
+	%hv =w loadsh $sh
+	%hchk =w ceqw %hv, -15536
+	%r =w and %bchk, %hchk
+	ret %r
+}

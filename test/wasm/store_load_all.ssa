@@ -1,0 +1,97 @@
+# expected: 1 w
+# exercise every store/load type through the new tables
+
+data $mem = { z 64 }
+
+function w $storeb_loadub(l %p, w %v) {
+@start
+	storeb %v, %p
+	%r =w loadub %p
+	ret %r
+}
+
+function w $storeh_loaduh(l %p, w %v) {
+@start
+	storeh %v, %p
+	%r =w loaduh %p
+	ret %r
+}
+
+function w $storew_loadw(l %p, w %v) {
+@start
+	storew %v, %p
+	%r =w load %p
+	ret %r
+}
+
+function l $storel_loadl(l %p, l %v) {
+@start
+	storel %v, %p
+	%r =l load %p
+	ret %r
+}
+
+function s $stores_loads(l %p, s %v) {
+@start
+	stores %v, %p
+	%r =s loads %p
+	ret %r
+}
+
+function d $stored_loadd(l %p, d %v) {
+@start
+	stored %v, %p
+	%r =d loadd %p
+	ret %r
+}
+
+function w $storeb_loadsb(l %p, w %v) {
+@start
+	storeb %v, %p
+	%r =w loadsb %p
+	ret %r
+}
+
+function w $storeh_loadsh(l %p, w %v) {
+@start
+	storeh %v, %p
+	%r =w loadsh %p
+	ret %r
+}
+
+export
+function w $test() {
+@start
+	%p0 =l add $mem, 0
+	%a =w call $storeb_loadub(l %p0, w 200)
+	%achk =w ceqw %a, 200
+	%p1 =l add $mem, 8
+	%b =w call $storeh_loaduh(l %p1, w 40000)
+	%bchk =w ceqw %b, 40000
+	%p2 =l add $mem, 16
+	%c =w call $storew_loadw(l %p2, w 123456)
+	%cchk =w ceqw %c, 123456
+	%p3 =l add $mem, 24
+	%d =l call $storel_loadl(l %p3, l 9876543210)
+	%dchk =w ceql %d, 9876543210
+	%p4 =l add $mem, 32
+	%e =s call $stores_loads(l %p4, s s_3.14)
+	%echk =w ceqs %e, s_3.14
+	%p5 =l add $mem, 40
+	%f =d call $stored_loadd(l %p5, d d_2.718)
+	%fchk =w ceqd %f, d_2.718
+	%p6 =l add $mem, 48
+	%g =w call $storeb_loadsb(l %p6, w 200)
+	%gchk =w ceqw %g, -56
+	%p7 =l add $mem, 56
+	%h =w call $storeh_loadsh(l %p7, w 50000)
+	%hchk =w ceqw %h, -15536
+	%t0 =w and %achk, %bchk
+	%t1 =w and %t0, %cchk
+	%t2 =w and %t1, %dchk
+	%t3 =w and %t2, %echk
+	%t4 =w and %t3, %fchk
+	%t5 =w and %t4, %gchk
+	%r =w and %t5, %hchk
+	ret %r
+}

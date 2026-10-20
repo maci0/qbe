@@ -1,0 +1,65 @@
+# expected: 1 w
+# float ordered/unordered for both f32 and f64 with dynamic operands
+
+function w $cos_test(s %a, s %b) {
+@start
+	%r =w cos %a, %b
+	ret %r
+}
+
+function w $cuos_test(s %a, s %b) {
+@start
+	%r =w cuos %a, %b
+	ret %r
+}
+
+function w $cod_test(d %a, d %b) {
+@start
+	%r =w cod %a, %b
+	ret %r
+}
+
+function w $cuod_test(d %a, d %b) {
+@start
+	%r =w cuod %a, %b
+	ret %r
+}
+
+function s $nanf() {
+@start
+	%z =s sub s_0.0, s_0.0
+	%r =s div %z, %z
+	ret %r
+}
+
+function d $nand() {
+@start
+	%z =d sub d_0.0, d_0.0
+	%r =d div %z, %z
+	ret %r
+}
+
+export
+function w $test() {
+@start
+	%nan_s =s call $nanf()
+	%nan_d =d call $nand()
+	%a =w call $cos_test(s s_1.0, s s_2.0)
+	%achk =w ceqw %a, 1
+	%b =w call $cuos_test(s %nan_s, s s_1.0)
+	%bchk =w ceqw %b, 1
+	%c =w call $cod_test(d d_1.0, d d_2.0)
+	%cchk =w ceqw %c, 1
+	%d =w call $cuod_test(d %nan_d, d d_1.0)
+	%dchk =w ceqw %d, 1
+	%e =w call $cos_test(s %nan_s, s s_1.0)
+	%echk =w ceqw %e, 0
+	%f =w call $cuod_test(d d_1.0, d d_2.0)
+	%fchk =w ceqw %f, 0
+	%t0 =w and %achk, %bchk
+	%t1 =w and %t0, %cchk
+	%t2 =w and %t1, %dchk
+	%t3 =w and %t2, %echk
+	%r =w and %t3, %fchk
+	ret %r
+}

@@ -1,0 +1,41 @@
+export
+function l $and(l %x, l %y) {
+@start
+	%r =l and %x, %y
+	ret %r
+}
+
+export
+function l $or(l %x, l %y) {
+@start
+	%r =l or %x, %y
+	ret %r
+}
+
+export
+function l $xor(l %x, l %y) {
+@start
+	%r =l xor %x, %y
+	ret %r
+}
+
+export
+function l $shl(l %x, l %y) {
+@start
+	%r =l shl %x, %y
+	ret %r
+}
+
+export
+function l $shr_u(l %x, l %y) {
+@start
+	%r =l shr %x, %y
+	ret %r
+}
+
+export
+function l $shr_s(l %x, l %y) {
+@start
+	%r =l sar %x, %y
+	ret %r
+}

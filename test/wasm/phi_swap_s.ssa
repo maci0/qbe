@@ -1,0 +1,26 @@
+# expected: 1 w
+# phi swap with f32 values (tests $sw_s swap local)
+
+function s $fib_s(s %a, s %b) {
+@start
+	jmp @loop
+@loop
+	%x =s phi @start %a, @loop %y
+	%y =s phi @start %b, @loop %s
+	%s =s add %x, %y
+	%c =w cgts %s, s_50.0
+	jnz %c, @done, @loop
+@done
+	%r =s div %y, %x
+	ret %r
+}
+
+export
+function w $test() {
+@start
+	%v =s call $fib_s(s s_1.0, s s_1.0)
+	%lo =w cgts %v, s_1.5
+	%hi =w clts %v, s_1.7
+	%r =w and %lo, %hi
+	ret %r
+}

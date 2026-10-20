@@ -1,0 +1,61 @@
+# expected: 1 w
+# i64 bitwise and shift ops with dynamic operands
+
+function l $andl(l %a, l %b) {
+@start
+	%r =l and %a, %b
+	ret %r
+}
+
+function l $orl(l %a, l %b) {
+@start
+	%r =l or %a, %b
+	ret %r
+}
+
+function l $xorl(l %a, l %b) {
+@start
+	%r =l xor %a, %b
+	ret %r
+}
+
+function l $shll(l %a, l %b) {
+@start
+	%r =l shl %a, %b
+	ret %r
+}
+
+function l $shrl(l %a, l %b) {
+@start
+	%r =l shr %a, %b
+	ret %r
+}
+
+function l $sarl(l %a, l %b) {
+@start
+	%r =l sar %a, %b
+	ret %r
+}
+
+export
+function w $test() {
+@start
+	%a =l call $andl(l 255, l 15)
+	%achk =w ceql %a, 15
+	%b =l call $orl(l 48, l 3)
+	%bchk =w ceql %b, 51
+	%c =l call $xorl(l 255, l 240)
+	%cchk =w ceql %c, 15
+	%d =l call $shll(l 1, l 10)
+	%dchk =w ceql %d, 1024
+	%e =l call $shrl(l 1024, l 5)
+	%echk =w ceql %e, 32
+	%f =l call $sarl(l -128, l 2)
+	%fchk =w ceql %f, -32
+	%t0 =w and %achk, %bchk
+	%t1 =w and %t0, %cchk
+	%t2 =w and %t1, %dchk
+	%t3 =w and %t2, %echk
+	%r =w and %t3, %fchk
+	ret %r
+}

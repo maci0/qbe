@@ -1,0 +1,12 @@
+# expected: 77
+# chain of copies
+
+export
+function w $test() {
+@start
+	%a =w copy 77
+	%b =w copy %a
+	%c =w copy %b
+	%d =w copy %c
+	ret %d
+}

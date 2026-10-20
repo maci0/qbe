@@ -1,0 +1,12 @@
+# expected: 13 w
+# f64 arithmetic, truncate to int to check
+
+export
+function w $test() {
+@start
+	%a =d add d_2.5, d_4.0
+	%b =d mul %a, d_2.0
+	%c =d sub %b, d_0.0
+	%r =w dtosi %c
+	ret %r
+}

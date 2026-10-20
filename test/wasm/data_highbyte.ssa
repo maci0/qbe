@@ -1,0 +1,28 @@
+# expected: 1 w
+# data with high byte values (0x80-0xff) to test uchar handling
+
+data $hb = { b 127, b 128, b 200, b 255, b 0 }
+
+export
+function w $test() {
+@start
+	%c0 =w loadub $hb
+	%chk0 =w ceqw %c0, 127
+	%p1 =l add $hb, 1
+	%c1 =w loadub %p1
+	%chk1 =w ceqw %c1, 128
+	%p2 =l add $hb, 2
+	%c2 =w loadub %p2
+	%chk2 =w ceqw %c2, 200
+	%p3 =l add $hb, 3
+	%c3 =w loadub %p3
+	%chk3 =w ceqw %c3, 255
+	%p4 =l add $hb, 4
+	%c4 =w loadub %p4
+	%chk4 =w ceqw %c4, 0
+	%t0 =w and %chk0, %chk1
+	%t1 =w and %t0, %chk2
+	%t2 =w and %t1, %chk3
+	%r =w and %t2, %chk4
+	ret %r
+}

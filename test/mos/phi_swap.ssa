@@ -1,0 +1,19 @@
+# expected: 7
+# test phi swap: a and b should exchange values each iteration
+
+export function w $test() {
+@start
+  %a0 =w copy 3
+  %b0 =w copy 7
+  jmp @loop
+@loop
+  %a =w phi @start %a0, @loop %b
+  %b =w phi @start %b0, @loop %a
+  %i0 =w phi @start 0, @loop %i1
+  %i1 =w add %i0, 1
+  %done =w ceqw %i1, 5
+  jnz %done, @exit, @loop
+@exit
+  # 5 iterations = 4 back-edge swaps (even): a=3, b=7
+  ret %b
+}

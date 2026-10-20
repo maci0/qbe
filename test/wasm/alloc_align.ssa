@@ -1,0 +1,22 @@
+# expected: 1 w
+# alloc4, alloc8, alloc16 store and load
+
+export
+function w $test() {
+@start
+	%p4 =l alloc4 4
+	storew 10, %p4
+	%a =w load %p4
+	%p8 =l alloc8 8
+	storel 20, %p8
+	%b =l load %p8
+	%p16 =l alloc16 16
+	storel 30, %p16
+	%c =l load %p16
+	%achk =w ceqw %a, 10
+	%bchk =w ceql %b, 20
+	%cchk =w ceql %c, 30
+	%t0 =w and %achk, %bchk
+	%r =w and %t0, %cchk
+	ret %r
+}

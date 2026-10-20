@@ -1,0 +1,17 @@
+# expected: 60 w
+# load from multiple named data segments
+
+data $a = { w 10 }
+data $b = { w 20 }
+data $c = { w 30 }
+
+export
+function w $test() {
+@start
+	%x =w load $a
+	%y =w load $b
+	%z =w load $c
+	%s =w add %x, %y
+	%r =w add %s, %z
+	ret %r
+}

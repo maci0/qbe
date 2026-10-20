@@ -1,0 +1,12 @@
+# expected: 42
+# branch: if 1 then 42 else 99
+
+export
+function w $test() {
+@start
+	jnz 1, @yes, @no
+@yes
+	ret 42
+@no
+	ret 99
+}

@@ -1,0 +1,13 @@
+# expected: 1 w
+# bitwise cast: int <-> float reinterpret
+
+export
+function w $test() {
+@start
+	%f =s cast 1065353216
+	%fchk =w ceqs %f, s_1.0
+	%i =w cast s_1.0
+	%ichk =w ceqw %i, 1065353216
+	%r =w and %fchk, %ichk
+	ret %r
+}

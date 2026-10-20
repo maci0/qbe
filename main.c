@@ -26,6 +26,12 @@ extern Target T_arm64;
 extern Target T_arm64_apple;
 extern Target T_arm64_win;
 extern Target T_rv64;
+extern Target T_wasm;
+extern Target T_mos;
+extern Target T_mos_2a07;
+extern Target T_mos_6510;
+extern Target T_mos_65c02;
+extern Target T_mos_65816;
 
 static Target *tlist[] = {
 	&T_amd64_sysv,
@@ -35,6 +41,12 @@ static Target *tlist[] = {
 	&T_arm64_apple,
 	&T_arm64_win,
 	&T_rv64,
+	&T_wasm,
+	&T_mos,
+	&T_mos_2a07,
+	&T_mos_6510,
+	&T_mos_65c02,
+	&T_mos_65816,
 	0
 };
 static FILE *outf;
@@ -45,9 +57,13 @@ data(Dat *d)
 {
 	if (dbg)
 		return;
-	emitdat(d, outf);
+	if (T.emitdat)
+		T.emitdat(d, outf);
+	else
+		emitdat(d, outf);
 	if (d->type == DEnd) {
-		fputs("/* end data */\n\n", outf);
+		if (!T.emitdat)
+			fputs("/* end data */\n\n", outf);
 		freeall();
 	}
 }
@@ -100,14 +116,16 @@ func(Fn *fn)
 	filluse(fn);
 	T.isel(fn);
 	fillcfg(fn);
-	filllive(fn);
-	fillloop(fn);
-	fillcost(fn);
-	spill(fn);
-	rega(fn);
-	fillcfg(fn);
-	simpljmp(fn);
-	fillcfg(fn);
+	if (!T.noreg) {
+		filllive(fn);
+		fillloop(fn);
+		fillcost(fn);
+		spill(fn);
+		rega(fn);
+		fillcfg(fn);
+		simpljmp(fn);
+		fillcfg(fn);
+	}
 	assert(fn->rpo[0] == fn->start);
 	for (n=0;; n++)
 		if (n == fn->nblk-1) {
@@ -117,7 +135,10 @@ func(Fn *fn)
 			fn->rpo[n]->link = fn->rpo[n+1];
 	if (!dbg) {
 		T.emitfn(fn, outf);
-		fprintf(outf, "/* end function %s */\n\n", fn->name);
+		if (T.noreg)
+			fprintf(outf, ";; end function %s\n\n", fn->name);
+		else
+			fprintf(outf, "/* end function %s */\n\n", fn->name);
 	} else
 		fprintf(stderr, "\n");
 	freeall();

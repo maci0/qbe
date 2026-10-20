@@ -1,0 +1,27 @@
+export
+function w $neg_w(w %x) {
+@start
+	%r =w neg %x
+	ret %r
+}
+
+export
+function l $neg_l(l %x) {
+@start
+	%r =l neg %x
+	ret %r
+}
+
+export
+function s $neg_s(s %x) {
+@start
+	%r =s neg %x
+	ret %r
+}
+
+export
+function d $neg_d(d %x) {
+@start
+	%r =d neg %x
+	ret %r
+}

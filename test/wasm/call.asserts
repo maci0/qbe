@@ -1,0 +1,23 @@
+;; call_add
+(assert_return (invoke "call_add" (i32.const 3) (i32.const 4)) (i32.const 7))
+(assert_return (invoke "call_add" (i32.const 0) (i32.const 0)) (i32.const 0))
+(assert_return (invoke "call_add" (i32.const -1) (i32.const 1)) (i32.const 0))
+(assert_return (invoke "call_add" (i32.const 100) (i32.const 200)) (i32.const 300))
+
+;; quadruple (call chain)
+(assert_return (invoke "quadruple" (i32.const 5)) (i32.const 20))
+(assert_return (invoke "quadruple" (i32.const 0)) (i32.const 0))
+(assert_return (invoke "quadruple" (i32.const 1)) (i32.const 4))
+(assert_return (invoke "quadruple" (i32.const -3)) (i32.const -12))
+
+;; factorial (recursive)
+(assert_return (invoke "factorial" (i64.const 0)) (i64.const 1))
+(assert_return (invoke "factorial" (i64.const 1)) (i64.const 1))
+(assert_return (invoke "factorial" (i64.const 5)) (i64.const 120))
+(assert_return (invoke "factorial" (i64.const 10)) (i64.const 3628800))
+(assert_return (invoke "factorial" (i64.const 12)) (i64.const 479001600))
+
+;; call_many (4 args)
+(assert_return (invoke "call_many" (i32.const 1) (i32.const 2) (i32.const 3) (i32.const 4)) (i32.const 10))
+(assert_return (invoke "call_many" (i32.const 0) (i32.const 0) (i32.const 0) (i32.const 0)) (i32.const 0))
+(assert_return (invoke "call_many" (i32.const -1) (i32.const -1) (i32.const -1) (i32.const -1)) (i32.const -4))

@@ -1,0 +1,51 @@
+# expected: 10
+# test all 10 64-bit comparison operators
+
+export function w $test() {
+@start
+  %a =l copy 4294967296
+  %b =l copy 4294967297
+  %r =w copy 0
+
+  # ceql: 4294967296 == 4294967296 -> 1
+  %t1 =w ceql %a, %a
+  %r =w add %r, %t1
+
+  # cnel: 4294967296 != 4294967297 -> 1
+  %t2 =w cnel %a, %b
+  %r =w add %r, %t2
+
+  # csltl: a < b (signed) -> 1
+  %t3 =w csltl %a, %b
+  %r =w add %r, %t3
+
+  # cslel: a <= a -> 1
+  %t4 =w cslel %a, %a
+  %r =w add %r, %t4
+
+  # csgtl: b > a (signed) -> 1
+  %t5 =w csgtl %b, %a
+  %r =w add %r, %t5
+
+  # csgel: a >= a -> 1
+  %t6 =w csgel %a, %a
+  %r =w add %r, %t6
+
+  # cultl: a < b (unsigned) -> 1
+  %t7 =w cultl %a, %b
+  %r =w add %r, %t7
+
+  # culel: a <= a (unsigned) -> 1
+  %t8 =w culel %a, %a
+  %r =w add %r, %t8
+
+  # cugtl: b > a (unsigned) -> 1
+  %t9 =w cugtl %b, %a
+  %r =w add %r, %t9
+
+  # cugel: b >= a (unsigned) -> 1
+  %t10 =w cugel %b, %a
+  %r =w add %r, %t10
+
+  ret %r
+}

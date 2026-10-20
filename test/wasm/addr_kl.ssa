@@ -1,0 +1,12 @@
+# expected: 42 w
+# data address used as i64 (CAddr at Kl, tests i64.extend_i32_u)
+
+data $val = { w 42 }
+
+export
+function w $test() {
+@start
+	%p =l copy $val
+	%r =w load %p
+	ret %r
+}

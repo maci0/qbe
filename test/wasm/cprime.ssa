@@ -1,0 +1,43 @@
+# expected: 1 w
+# count primes below 100 = 25
+
+function w $isprime(w %n) {
+@start
+	%small =w csltw %n, 2
+	jnz %small, @no, @check
+@check
+	jmp @loop
+@loop
+	%i =w phi @check 2, @next %i1
+	%sq =w mul %i, %i
+	%cond =w csgtw %sq, %n
+	jnz %cond, @yes, @test
+@test
+	%r =w rem %n, %i
+	%div =w ceqw %r, 0
+	jnz %div, @no, @next
+@next
+	%i1 =w add %i, 1
+	jmp @loop
+@yes
+	ret 1
+@no
+	ret 0
+}
+
+export
+function w $test() {
+@start
+	jmp @head
+@head
+	%n =w phi @start 2, @head %n1
+	%cnt =w phi @start 0, @head %cnt1
+	%p =w call $isprime(w %n)
+	%cnt1 =w add %cnt, %p
+	%n1 =w add %n, 1
+	%c =w csltw %n1, 100
+	jnz %c, @head, @done
+@done
+	%r =w ceqw %cnt1, 25
+	ret %r
+}

@@ -1,0 +1,17 @@
+# expected: 1 w
+# store/load byte and halfword sizes
+
+data $mem = { z 8 }
+
+export
+function w $test() {
+@start
+	storeb 200, $mem
+	%b =w loadub $mem
+	%bchk =w ceqw %b, 200
+	storeh 40000, $mem
+	%h =w loaduh $mem
+	%hchk =w ceqw %h, 40000
+	%r =w and %bchk, %hchk
+	ret %r
+}

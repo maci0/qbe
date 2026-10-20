@@ -1,0 +1,71 @@
+;; eq
+(assert_return (invoke "eq" (i32.const 0) (i32.const 0)) (i32.const 1))
+(assert_return (invoke "eq" (i32.const 1) (i32.const 1)) (i32.const 1))
+(assert_return (invoke "eq" (i32.const -1) (i32.const 1)) (i32.const 0))
+(assert_return (invoke "eq" (i32.const 0x80000000) (i32.const 0x80000000)) (i32.const 1))
+(assert_return (invoke "eq" (i32.const 0x7fffffff) (i32.const 0x7fffffff)) (i32.const 1))
+(assert_return (invoke "eq" (i32.const -1) (i32.const -1)) (i32.const 1))
+(assert_return (invoke "eq" (i32.const 1) (i32.const 0)) (i32.const 0))
+
+;; ne
+(assert_return (invoke "ne" (i32.const 0) (i32.const 0)) (i32.const 0))
+(assert_return (invoke "ne" (i32.const 1) (i32.const 1)) (i32.const 0))
+(assert_return (invoke "ne" (i32.const -1) (i32.const 1)) (i32.const 1))
+(assert_return (invoke "ne" (i32.const 1) (i32.const 0)) (i32.const 1))
+(assert_return (invoke "ne" (i32.const 0x80000000) (i32.const 0x7fffffff)) (i32.const 1))
+
+;; lt_s
+(assert_return (invoke "lt_s" (i32.const 0) (i32.const 0)) (i32.const 0))
+(assert_return (invoke "lt_s" (i32.const -1) (i32.const 1)) (i32.const 1))
+(assert_return (invoke "lt_s" (i32.const 0x80000000) (i32.const 0)) (i32.const 1))
+(assert_return (invoke "lt_s" (i32.const 0) (i32.const 0x80000000)) (i32.const 0))
+(assert_return (invoke "lt_s" (i32.const 0x80000000) (i32.const -1)) (i32.const 1))
+(assert_return (invoke "lt_s" (i32.const -1) (i32.const 0x80000000)) (i32.const 0))
+(assert_return (invoke "lt_s" (i32.const 0x80000000) (i32.const 0x7fffffff)) (i32.const 1))
+
+;; le_s
+(assert_return (invoke "le_s" (i32.const 0) (i32.const 0)) (i32.const 1))
+(assert_return (invoke "le_s" (i32.const -1) (i32.const 1)) (i32.const 1))
+(assert_return (invoke "le_s" (i32.const 0x80000000) (i32.const 0)) (i32.const 1))
+(assert_return (invoke "le_s" (i32.const 1) (i32.const 0)) (i32.const 0))
+(assert_return (invoke "le_s" (i32.const 0x80000000) (i32.const 0x80000000)) (i32.const 1))
+
+;; gt_s
+(assert_return (invoke "gt_s" (i32.const 0) (i32.const 0)) (i32.const 0))
+(assert_return (invoke "gt_s" (i32.const 1) (i32.const 0)) (i32.const 1))
+(assert_return (invoke "gt_s" (i32.const 0) (i32.const 1)) (i32.const 0))
+(assert_return (invoke "gt_s" (i32.const 0) (i32.const 0x80000000)) (i32.const 1))
+(assert_return (invoke "gt_s" (i32.const 0x7fffffff) (i32.const 0x80000000)) (i32.const 1))
+
+;; ge_s
+(assert_return (invoke "ge_s" (i32.const 0) (i32.const 0)) (i32.const 1))
+(assert_return (invoke "ge_s" (i32.const 1) (i32.const 0)) (i32.const 1))
+(assert_return (invoke "ge_s" (i32.const 0) (i32.const 1)) (i32.const 0))
+(assert_return (invoke "ge_s" (i32.const 0x80000000) (i32.const 0)) (i32.const 0))
+(assert_return (invoke "ge_s" (i32.const 0x7fffffff) (i32.const 0x80000000)) (i32.const 1))
+
+;; lt_u
+(assert_return (invoke "lt_u" (i32.const 0) (i32.const 0)) (i32.const 0))
+(assert_return (invoke "lt_u" (i32.const -1) (i32.const 1)) (i32.const 0))
+(assert_return (invoke "lt_u" (i32.const 0) (i32.const 1)) (i32.const 1))
+(assert_return (invoke "lt_u" (i32.const 0) (i32.const 0x80000000)) (i32.const 1))
+(assert_return (invoke "lt_u" (i32.const 0x80000000) (i32.const -1)) (i32.const 1))
+(assert_return (invoke "lt_u" (i32.const 0x7fffffff) (i32.const 0x80000000)) (i32.const 1))
+
+;; le_u
+(assert_return (invoke "le_u" (i32.const 0) (i32.const 0)) (i32.const 1))
+(assert_return (invoke "le_u" (i32.const -1) (i32.const 1)) (i32.const 0))
+(assert_return (invoke "le_u" (i32.const 0) (i32.const 1)) (i32.const 1))
+(assert_return (invoke "le_u" (i32.const 0x80000000) (i32.const -1)) (i32.const 1))
+
+;; gt_u
+(assert_return (invoke "gt_u" (i32.const 0) (i32.const 0)) (i32.const 0))
+(assert_return (invoke "gt_u" (i32.const -1) (i32.const 1)) (i32.const 1))
+(assert_return (invoke "gt_u" (i32.const 1) (i32.const 0)) (i32.const 1))
+(assert_return (invoke "gt_u" (i32.const 0x80000000) (i32.const 0x7fffffff)) (i32.const 1))
+
+;; ge_u
+(assert_return (invoke "ge_u" (i32.const 0) (i32.const 0)) (i32.const 1))
+(assert_return (invoke "ge_u" (i32.const -1) (i32.const 1)) (i32.const 1))
+(assert_return (invoke "ge_u" (i32.const 1) (i32.const 0)) (i32.const 1))
+(assert_return (invoke "ge_u" (i32.const 0) (i32.const 1)) (i32.const 0))

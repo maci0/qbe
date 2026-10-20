@@ -1,0 +1,14 @@
+# expected: 42
+# call: helper returns 42
+
+function w $helper() {
+@start
+	ret 42
+}
+
+export
+function w $test() {
+@start
+	%r =w call $helper()
+	ret %r
+}

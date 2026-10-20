@@ -1,0 +1,67 @@
+# expected: 1 w
+# f32 and f64 arithmetic with dynamic operands
+
+function s $adds(s %a, s %b) {
+@start
+	%r =s add %a, %b
+	ret %r
+}
+
+function s $subs(s %a, s %b) {
+@start
+	%r =s sub %a, %b
+	ret %r
+}
+
+function s $muls(s %a, s %b) {
+@start
+	%r =s mul %a, %b
+	ret %r
+}
+
+function s $divs(s %a, s %b) {
+@start
+	%r =s div %a, %b
+	ret %r
+}
+
+function d $addd(d %a, d %b) {
+@start
+	%r =d add %a, %b
+	ret %r
+}
+
+function d $subd(d %a, d %b) {
+@start
+	%r =d sub %a, %b
+	ret %r
+}
+
+function d $muld(d %a, d %b) {
+@start
+	%r =d mul %a, %b
+	ret %r
+}
+
+function d $divd(d %a, d %b) {
+@start
+	%r =d div %a, %b
+	ret %r
+}
+
+export
+function w $test() {
+@start
+	%a =s call $adds(s s_1.5, s s_2.5)
+	%b =s call $subs(s %a, s s_1.0)
+	%c =s call $muls(s %b, s s_2.0)
+	%d =s call $divs(s %c, s s_3.0)
+	%schk =w ceqs %d, s_2.0
+	%e =d call $addd(d d_1.5, d d_2.5)
+	%f =d call $subd(d %e, d d_1.0)
+	%g =d call $muld(d %f, d d_2.0)
+	%h =d call $divd(d %g, d d_3.0)
+	%dchk =w ceqd %h, d_2.0
+	%r =w and %schk, %dchk
+	ret %r
+}

@@ -1,0 +1,18 @@
+# expected: 42 w
+# jnz with i64 condition (tests i64.const 0 / i64.ne path)
+
+function w $check(l %p) {
+@start
+	jnz %p, @nonnull, @null
+@nonnull
+	ret 42
+@null
+	ret 0
+}
+
+export
+function w $test() {
+@start
+	%r =w call $check(l 999)
+	ret %r
+}

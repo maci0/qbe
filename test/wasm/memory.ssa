@@ -1,0 +1,71 @@
+export
+function w $store_load_sb(w %v) {
+@start
+	%p =l alloc4 4
+	storeb %v, %p
+	%r =w loadsb %p
+	ret %r
+}
+
+export
+function w $store_load_ub(w %v) {
+@start
+	%p =l alloc4 4
+	storeb %v, %p
+	%r =w loadub %p
+	ret %r
+}
+
+export
+function w $store_load_sh(w %v) {
+@start
+	%p =l alloc4 4
+	storeh %v, %p
+	%r =w loadsh %p
+	ret %r
+}
+
+export
+function w $store_load_uh(w %v) {
+@start
+	%p =l alloc4 4
+	storeh %v, %p
+	%r =w loaduh %p
+	ret %r
+}
+
+export
+function w $store_load_w(w %v) {
+@start
+	%p =l alloc4 4
+	storew %v, %p
+	%r =w load %p
+	ret %r
+}
+
+export
+function l $store_load_l(l %v) {
+@start
+	%p =l alloc4 8
+	storel %v, %p
+	%r =l load %p
+	ret %r
+}
+
+export
+function s $store_load_s(s %v) {
+@start
+	%p =l alloc4 4
+	stores %v, %p
+	%r =s load %p
+	ret %r
+}
+
+export
+function d $store_load_d(d %v) {
+@start
+	%p =l alloc4 8
+	stored %v, %p
+	%r =d load %p
+	ret %r
+}

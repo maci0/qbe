@@ -1,0 +1,39 @@
+;; add
+(assert_return (invoke "add" (f64.const 1.0) (f64.const 1.0)) (f64.const 2.0))
+(assert_return (invoke "add" (f64.const 1.0) (f64.const 0.0)) (f64.const 1.0))
+(assert_return (invoke "add" (f64.const -1.0) (f64.const -1.0)) (f64.const -2.0))
+(assert_return (invoke "add" (f64.const -1.0) (f64.const 1.0)) (f64.const 0.0))
+(assert_return (invoke "add" (f64.const 0.0) (f64.const -0.0)) (f64.const 0.0))
+(assert_return (invoke "add" (f64.const 1e300) (f64.const 1.0)) (f64.const 1e300))
+(assert_return (invoke "add" (f64.const inf) (f64.const 1.0)) (f64.const inf))
+(assert_return (invoke "add" (f64.const -inf) (f64.const 1.0)) (f64.const -inf))
+
+;; sub
+(assert_return (invoke "sub" (f64.const 1.0) (f64.const 1.0)) (f64.const 0.0))
+(assert_return (invoke "sub" (f64.const 1.0) (f64.const 0.0)) (f64.const 1.0))
+(assert_return (invoke "sub" (f64.const -1.0) (f64.const -1.0)) (f64.const 0.0))
+(assert_return (invoke "sub" (f64.const inf) (f64.const 1.0)) (f64.const inf))
+(assert_return (invoke "sub" (f64.const 1.0) (f64.const inf)) (f64.const -inf))
+(assert_return (invoke "sub" (f64.const 3.141592653589793) (f64.const 3.141592653589793)) (f64.const 0.0))
+(assert_return (invoke "sub" (f64.const 0.5) (f64.const 0.25)) (f64.const 0.25))
+(assert_return (invoke "sub" (f64.const 1e-300) (f64.const 1e-300)) (f64.const 0.0))
+
+;; mul
+(assert_return (invoke "mul" (f64.const 1.0) (f64.const 1.0)) (f64.const 1.0))
+(assert_return (invoke "mul" (f64.const 1.0) (f64.const 0.0)) (f64.const 0.0))
+(assert_return (invoke "mul" (f64.const -1.0) (f64.const -1.0)) (f64.const 1.0))
+(assert_return (invoke "mul" (f64.const 2.0) (f64.const 3.0)) (f64.const 6.0))
+(assert_return (invoke "mul" (f64.const inf) (f64.const 1.0)) (f64.const inf))
+(assert_return (invoke "mul" (f64.const inf) (f64.const -1.0)) (f64.const -inf))
+(assert_return (invoke "mul" (f64.const 0.5) (f64.const 0.5)) (f64.const 0.25))
+(assert_return (invoke "mul" (f64.const -0.0) (f64.const 1.0)) (f64.const -0.0))
+
+;; div
+(assert_return (invoke "div" (f64.const 1.0) (f64.const 1.0)) (f64.const 1.0))
+(assert_return (invoke "div" (f64.const 0.0) (f64.const 1.0)) (f64.const 0.0))
+(assert_return (invoke "div" (f64.const -1.0) (f64.const -1.0)) (f64.const 1.0))
+(assert_return (invoke "div" (f64.const 6.0) (f64.const 3.0)) (f64.const 2.0))
+(assert_return (invoke "div" (f64.const 1.0) (f64.const inf)) (f64.const 0.0))
+(assert_return (invoke "div" (f64.const -1.0) (f64.const inf)) (f64.const -0.0))
+(assert_return (invoke "div" (f64.const inf) (f64.const 1.0)) (f64.const inf))
+(assert_return (invoke "div" (f64.const inf) (f64.const -1.0)) (f64.const -inf))

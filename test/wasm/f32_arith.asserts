@@ -1,0 +1,39 @@
+;; add
+(assert_return (invoke "add" (f32.const 1.0) (f32.const 1.0)) (f32.const 2.0))
+(assert_return (invoke "add" (f32.const 1.0) (f32.const 0.0)) (f32.const 1.0))
+(assert_return (invoke "add" (f32.const -1.0) (f32.const -1.0)) (f32.const -2.0))
+(assert_return (invoke "add" (f32.const -1.0) (f32.const 1.0)) (f32.const 0.0))
+(assert_return (invoke "add" (f32.const 0.0) (f32.const -0.0)) (f32.const 0.0))
+(assert_return (invoke "add" (f32.const 1e10) (f32.const 1.0)) (f32.const 1e10))
+(assert_return (invoke "add" (f32.const inf) (f32.const 1.0)) (f32.const inf))
+(assert_return (invoke "add" (f32.const -inf) (f32.const 1.0)) (f32.const -inf))
+
+;; sub
+(assert_return (invoke "sub" (f32.const 1.0) (f32.const 1.0)) (f32.const 0.0))
+(assert_return (invoke "sub" (f32.const 1.0) (f32.const 0.0)) (f32.const 1.0))
+(assert_return (invoke "sub" (f32.const -1.0) (f32.const -1.0)) (f32.const 0.0))
+(assert_return (invoke "sub" (f32.const 0.0) (f32.const 0.0)) (f32.const 0.0))
+(assert_return (invoke "sub" (f32.const inf) (f32.const 1.0)) (f32.const inf))
+(assert_return (invoke "sub" (f32.const 1.0) (f32.const inf)) (f32.const -inf))
+(assert_return (invoke "sub" (f32.const 3.14) (f32.const 3.14)) (f32.const 0.0))
+(assert_return (invoke "sub" (f32.const 0.5) (f32.const 0.25)) (f32.const 0.25))
+
+;; mul
+(assert_return (invoke "mul" (f32.const 1.0) (f32.const 1.0)) (f32.const 1.0))
+(assert_return (invoke "mul" (f32.const 1.0) (f32.const 0.0)) (f32.const 0.0))
+(assert_return (invoke "mul" (f32.const -1.0) (f32.const -1.0)) (f32.const 1.0))
+(assert_return (invoke "mul" (f32.const 2.0) (f32.const 3.0)) (f32.const 6.0))
+(assert_return (invoke "mul" (f32.const inf) (f32.const 1.0)) (f32.const inf))
+(assert_return (invoke "mul" (f32.const inf) (f32.const -1.0)) (f32.const -inf))
+(assert_return (invoke "mul" (f32.const 0.5) (f32.const 0.5)) (f32.const 0.25))
+(assert_return (invoke "mul" (f32.const -0.0) (f32.const 1.0)) (f32.const -0.0))
+
+;; div
+(assert_return (invoke "div" (f32.const 1.0) (f32.const 1.0)) (f32.const 1.0))
+(assert_return (invoke "div" (f32.const 0.0) (f32.const 1.0)) (f32.const 0.0))
+(assert_return (invoke "div" (f32.const -1.0) (f32.const -1.0)) (f32.const 1.0))
+(assert_return (invoke "div" (f32.const 6.0) (f32.const 3.0)) (f32.const 2.0))
+(assert_return (invoke "div" (f32.const 1.0) (f32.const inf)) (f32.const 0.0))
+(assert_return (invoke "div" (f32.const -1.0) (f32.const inf)) (f32.const -0.0))
+(assert_return (invoke "div" (f32.const inf) (f32.const 1.0)) (f32.const inf))
+(assert_return (invoke "div" (f32.const inf) (f32.const -1.0)) (f32.const -inf))

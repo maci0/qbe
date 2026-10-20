@@ -1,0 +1,11 @@
+# expected: 42 w
+# loadsw with w result (tests load32_s -> load fixup)
+
+data $val = { w 42 }
+
+export
+function w $test() {
+@start
+	%r =w loadsw $val
+	ret %r
+}

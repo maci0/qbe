@@ -1,0 +1,11 @@
+# expected: 42 w
+# stack allocation and store/load through it
+
+export
+function w $test() {
+@start
+	%p =l alloc4 4
+	storew 42, %p
+	%r =w load %p
+	ret %r
+}

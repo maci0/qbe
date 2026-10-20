@@ -1,0 +1,19 @@
+# expected: 1 w
+# sign/zero extend byte and halfword
+
+export
+function w $test() {
+@start
+	%a =w extsb 200
+	%achk =w ceqw %a, -56
+	%b =w extub 200
+	%bchk =w ceqw %b, 200
+	%c =w extsh 50000
+	%cchk =w ceqw %c, -15536
+	%d =w extuh 50000
+	%dchk =w ceqw %d, 50000
+	%t0 =w and %achk, %bchk
+	%t1 =w and %t0, %cchk
+	%r =w and %t1, %dchk
+	ret %r
+}

@@ -1,0 +1,41 @@
+export
+function w $and(w %x, w %y) {
+@start
+	%r =w and %x, %y
+	ret %r
+}
+
+export
+function w $or(w %x, w %y) {
+@start
+	%r =w or %x, %y
+	ret %r
+}
+
+export
+function w $xor(w %x, w %y) {
+@start
+	%r =w xor %x, %y
+	ret %r
+}
+
+export
+function w $shl(w %x, w %y) {
+@start
+	%r =w shl %x, %y
+	ret %r
+}
+
+export
+function w $shr_u(w %x, w %y) {
+@start
+	%r =w shr %x, %y
+	ret %r
+}
+
+export
+function w $shr_s(w %x, w %y) {
+@start
+	%r =w sar %x, %y
+	ret %r
+}

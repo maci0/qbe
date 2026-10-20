@@ -1,0 +1,33 @@
+# expected: 100
+export function w $sum_varargs(w %count, ...) {
+@start
+	%vp =l alloc8 32
+	vastart %vp
+	%res =w copy 0
+@loop
+	%c =w phi @start %count, @next %c1
+	%r =w phi @start 0, @next %r1
+	%is_zero =w ceqw %c, 0
+	jnz %is_zero, @end, @next
+@next
+	%val =w vaarg %vp
+	%r1 =w add %r, %val
+	%c1 =w sub %c, 1
+	jmp @loop
+@end
+	ret %r
+}
+
+export function w $test() {
+@start
+	%r =w call $sum_varargs(w 4, ..., w 10, w 20, w 30, w 40)
+	ret %r
+}
+
+# >>> driver
+# extern int test(void);
+# int main() { printf("%d\n", test()); return 0; }
+# <<<
+# >>> output
+# 100
+# <<<

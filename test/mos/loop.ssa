@@ -1,0 +1,19 @@
+# expected: 10
+# loop: sum 1..4 = 10
+
+export
+function w $test() {
+@start
+	jmp @loop
+@loop
+	%i =w phi @start 1, @next %i2
+	%s =w phi @start 0, @next %s2
+	%s2 =w add %s, %i
+	%i2 =w add %i, 1
+	%c =w csltw %i2, 5
+	jnz %c, @next, @end
+@next
+	jmp @loop
+@end
+	ret %s2
+}

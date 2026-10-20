@@ -1,0 +1,28 @@
+# expected: 1 w
+# signed byte/half loads into i64 result class
+
+data $sb = { b 200 }
+data $sh = { h 50000 }
+
+function l $ldsbl(l %p) {
+@start
+	%r =l loadsb %p
+	ret %r
+}
+
+function l $ldshl(l %p) {
+@start
+	%r =l loadsh %p
+	ret %r
+}
+
+export
+function w $test() {
+@start
+	%bv =l call $ldsbl(l $sb)
+	%bchk =w ceql %bv, -56
+	%hv =l call $ldshl(l $sh)
+	%hchk =w ceql %hv, -15536
+	%r =w and %bchk, %hchk
+	ret %r
+}

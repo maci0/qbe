@@ -1,0 +1,26 @@
+# expected: 4
+# 64-bit comparison operations
+
+export
+function w $test() {
+@start
+	%r =w copy 0
+
+	# 64-bit equal: 0x100000000 == 0x100000000 → true
+	%a =w ceql 4294967296, 4294967296
+	%r =w add %r, %a
+
+	# 64-bit not equal: 0x100000000 != 0x1 → true
+	%b =w cnel 4294967296, 1
+	%r =w add %r, %b
+
+	# 64-bit unsigned less: 1 < 0x100000000 → true
+	%c =w cultl 1, 4294967296
+	%r =w add %r, %c
+
+	# 64-bit signed less: -1 < 1 → true
+	%d =w csltl -1, 1
+	%r =w add %r, %d
+
+	ret %r
+}

@@ -1,0 +1,29 @@
+# expected: 123
+
+type :st1 = { w, l }
+type :st2 = { b 10 }
+
+function :st1 $get_st1() {
+@start
+    %ptr =l alloc4 12
+    storew 42, %ptr
+    %ptr4 =l add %ptr, 4
+    storel 81, %ptr4
+    ret %ptr
+}
+
+export
+function l $test() {
+@start
+    %res =:st1 call $get_st1()
+    
+    %w =w loadw %res
+    %res4 =l add %res, 4
+    %l =l loadl %res4
+    
+    %w_ext =l extuw %w
+    %sum =l add %l, %w_ext
+    
+    # 81 + 42 = 123
+    ret %sum
+}

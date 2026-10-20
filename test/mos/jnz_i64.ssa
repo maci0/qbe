@@ -1,0 +1,13 @@
+# expected: 1
+# test jnz with 64-bit condition value
+
+export function w $test() {
+@start
+  %v =l copy 4294967296
+  # 4294967296 = 0x100000000 (only upper 32 bits set)
+  jnz %v, @yes, @no
+@yes
+  ret 1
+@no
+  ret 0
+}
