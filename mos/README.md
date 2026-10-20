@@ -91,5 +91,5 @@ make check-mos   # runs all upstream + wasm + mos tests
 ```
 
 Requires cc65 toolchain (`ca65`, `ld65`, `sim65`).
-The MOS suite runs 43 test programs across all 5 chip variants
-(165 passing, 42 assembly-only on 65816 where sim65 cannot simulate).
+The MOS suite runs 44 test programs across all 5 chip variants
+(169 passing, 43 assembly-only on 65816 where sim65 cannot simulate).
