@@ -1,0 +1,15 @@
+# expected: 25
+# simple function call: square(5) = 25
+
+function w $square(w %x) {
+@start
+	%r =w mul %x, %x
+	ret %r
+}
+
+export
+function w $test() {
+@start
+	%r =w call $square(w 5)
+	ret %r
+}

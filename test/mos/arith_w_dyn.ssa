@@ -1,0 +1,58 @@
+# expected: 5
+# all i32 arithmetic ops with dynamic operands
+
+function w $addw(w %a, w %b) {
+@start
+	%r =w add %a, %b
+	ret %r
+}
+
+function w $subw(w %a, w %b) {
+@start
+	%r =w sub %a, %b
+	ret %r
+}
+
+function w $mulw(w %a, w %b) {
+@start
+	%r =w mul %a, %b
+	ret %r
+}
+
+function w $divw(w %a, w %b) {
+@start
+	%r =w div %a, %b
+	ret %r
+}
+
+function w $udivw(w %a, w %b) {
+@start
+	%r =w udiv %a, %b
+	ret %r
+}
+
+function w $remw(w %a, w %b) {
+@start
+	%r =w rem %a, %b
+	ret %r
+}
+
+function w $uremw(w %a, w %b) {
+@start
+	%r =w urem %a, %b
+	ret %r
+}
+
+export
+function w $test() {
+@start
+	%a =w call $addw(w 10, w 32)
+	%b =w call $subw(w %a, w 12)
+	%c =w call $mulw(w %b, w 2)
+	%d =w call $divw(w %c, w 4)
+	%e =w call $udivw(w %d, w 3)
+	%f =w call $remw(w 17, w %e)
+	%g =w call $uremw(w 13, w %e)
+	%r =w add %f, %g
+	ret %r
+}

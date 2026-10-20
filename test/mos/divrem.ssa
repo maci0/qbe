@@ -1,0 +1,9 @@
+# expected: 3
+# divrem: 13 % 5 = 3
+
+export
+function w $test() {
+@start
+	%r =w rem 13, 5
+	ret %r
+}

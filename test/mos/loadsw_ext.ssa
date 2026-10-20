@@ -1,0 +1,26 @@
+# expected: 3
+# test sign/zero extension of loadsw and loaduw
+
+data $val = { w 200 }
+
+export function w $test() {
+@start
+  %r =w copy 0
+
+  # loadsw: sign-extend positive word to long
+  %sp =l loadsw $val
+  %check_pos =w ceql %sp, 200
+  %r1 =w add %r, %check_pos
+
+  # loaduw: zero-extend word to long
+  %un =l loaduw $val
+  %check_uz =w ceql %un, 200
+  %r2 =w add %r1, %check_uz
+
+  # check high bytes are zero (200 is positive, high 4 bytes = 0)
+  %hi =l shr %sp, 32
+  %check_hi =w ceql %hi, 0
+  %r3 =w add %r2, %check_hi
+
+  ret %r3
+}

@@ -1,0 +1,25 @@
+# expected: 56
+# nested loops: compute 7 * 8 via repeated addition
+
+export
+function w $test() {
+@start
+	jmp @outer
+@outer
+	%i =w phi @start 0, @inner_done %i1
+	%sum =w phi @start 0, @inner_done %sum2
+	%i1 =w add %i, 1
+	jmp @inner
+@inner
+	%j =w phi @outer 0, @inner %j1
+	%sum1 =w phi @outer %sum, @inner %sum2
+	%sum2 =w add %sum1, 7
+	%j1 =w add %j, 1
+	%jc =w csltw %j1, 8
+	jnz %jc, @inner, @inner_done
+@inner_done
+	%ic =w csltw %i1, 1
+	jnz %ic, @outer, @done
+@done
+	ret %sum2
+}

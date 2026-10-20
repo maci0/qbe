@@ -1,0 +1,12 @@
+# expected: 7 65c02
+# same arithmetic test but targeting 65C02
+
+export
+function w $test() {
+@start
+	%a =w add 10, 3
+	%b =w mul %a, 2
+	%c =w sub %b, 5
+	%d =w div %c, 3
+	ret %d
+}

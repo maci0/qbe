@@ -1,0 +1,18 @@
+# expected: 1
+# signed and unsigned div/rem edge cases
+
+export
+function w $test() {
+@start
+	%a =w rem -7, 3
+	%b =w urem 7, 3
+	%c =w div -9, 2
+	%d =w udiv 9, 2
+	# -7 % 3 = -1, 7 %u 3 = 1, -9 / 2 = -4, 9 /u 2 = 4
+	# -1 + 1 + (-4) + 4 = 0, then check 0 == 0
+	%s =w add %a, %b
+	%s2 =w add %s, %c
+	%s3 =w add %s2, %d
+	%r =w ceqw %s3, 0
+	ret %r
+}

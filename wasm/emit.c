@@ -27,20 +27,25 @@ static int segoff;
 static int
 segaddr(char *name)
 {
-	int i;
+	int i, n;
 
 	for (i=0; i<nseg; i++)
 		if (strcmp(segs[i].name, name) == 0)
 			return segs[i].off;
-	/* allocate space for unknown symbol */
+	/* allocate placeholder for forward-referenced symbol */
 	if (nseg >= SegMax)
 		die("too many data segments");
 	if (dataoff + 8 > DataBase + DataMax)
 		die("data section too large");
+	/* pad databuf to keep addresses aligned with data */
+	while (datalen < dataoff - DataBase)
+		databuf[datalen++] = 0;
 	i = nseg++;
 	segs[i].name = name;
 	segs[i].off = dataoff;
 	segs[i].len = 8;
+	for (n=0; n<8; n++)
+		databuf[datalen++] = 0;
 	dataoff += 8;
 	return segs[i].off;
 }
@@ -124,6 +129,8 @@ emitref(Ref r, int cls, Fn *fn, FILE *f)
 		fprintf(f, "    i32.const %d\n",
 			(int)r.val & 0x1fffffff);
 		fputs("    i32.add\n", f);
+		if (cls == Kl)
+			fputs("    i64.extend_i32_u\n", f);
 		break;
 	default:
 		break;
@@ -312,6 +319,8 @@ emitins(Ins *i, Fn *fn, FILE *f)
 		}
 		fputs("    global.set $__stack_pointer\n"
 			"    global.get $__stack_pointer\n", f);
+		if (cls == Kl)
+			fputs("    i64.extend_i32_u\n", f);
 		emitlset(i->to, f);
 		return;
 	}
@@ -468,7 +477,13 @@ wasm_emitfn(Fn *fn, FILE *out)
 {
 	Blk *b;
 	Ins *i;
-	int n, j, t;
+	int n, j, t, hasalloc;
+
+	hasalloc = 0;
+	for (b=fn->start; b; b=b->link)
+		for (i=b->ins; i<&b->ins[b->nins]; i++)
+			if (isalloc(i->op))
+				hasalloc = 1;
 
 	emitmodhdr(out);
 
@@ -499,6 +514,8 @@ wasm_emitfn(Fn *fn, FILE *out)
 		"    (local $sw_l i64)\n"
 		"    (local $sw_s f32)\n"
 		"    (local $sw_d f64)\n", out);
+	if (hasalloc)
+		fputs("    (local $__saved_sp i32)\n", out);
 	for (t=Tmp0; t<fn->ntmp; t++) {
 		if (fn->tmp[t].cls == Kx)
 			continue;
@@ -508,6 +525,9 @@ wasm_emitfn(Fn *fn, FILE *out)
 			t - Tmp0, wtyp[fn->tmp[t].cls]);
 	}
 
+	if (hasalloc)
+		fputs("    global.get $__stack_pointer\n"
+			"    local.set $__saved_sp\n", out);
 	if (fn->nblk > 1) {
 		fprintf(out, "    i32.const %d\n",
 			(int)fn->nblk - 1);
@@ -570,6 +590,10 @@ wasm_emitfn(Fn *fn, FILE *out)
 			break;
 		default:
 			if (isret(b->jmp.type)) {
+				if (hasalloc)
+					fputs("    local.get $__saved_sp\n"
+						"    global.set $__stack_pointer\n",
+						out);
 				if (b->jmp.type != Jret0
 				&& !req(b->jmp.arg, R))
 					emitref(b->jmp.arg,
@@ -593,9 +617,13 @@ wasm_emitfn(Fn *fn, FILE *out)
 static void
 databyte(int c)
 {
-	if (datalen >= DataMax)
+	int pos = segoff - DataBase;
+	if (pos >= DataMax)
 		die("data section too large");
-	databuf[datalen++] = (uchar)c;
+	databuf[pos] = (uchar)c;
+	segoff++;
+	if (segoff - DataBase > datalen)
+		datalen = segoff - DataBase;
 }
 
 void
@@ -607,19 +635,31 @@ wasm_emitdat(Dat *d, FILE *out)
 	emitmodhdr(out);
 
 	switch (d->type) {
-	case DStart:
-		if (nseg >= SegMax)
-			die("too many data segments");
-		curseg = nseg++;
-		segs[curseg].name = str(intern(d->name));
+	case DStart: {
+		char *nm = str(intern(d->name));
+		/* check for placeholder created by forward reference */
+		curseg = -1;
+		for (i=0; i<nseg; i++)
+			if (strcmp(segs[i].name, nm) == 0) {
+				curseg = i;
+				break;
+			}
+		if (curseg < 0) {
+			if (nseg >= SegMax)
+				die("too many data segments");
+			curseg = nseg++;
+			segs[curseg].name = nm;
+			segs[curseg].off = dataoff;
+		}
 		segs[curseg].lnk = *d->lnk;
-		segs[curseg].off = dataoff;
 		segs[curseg].len = 0;
-		segoff = dataoff;
+		segoff = segs[curseg].off;
 		break;
+	}
 	case DEnd:
-		dataoff = segoff;
-		segs[curseg].len = dataoff - segs[curseg].off;
+		segs[curseg].len = segoff - segs[curseg].off;
+		if (segoff > dataoff)
+			dataoff = segoff;
 		if (segs[curseg].lnk.export)
 			fprintf(out,
 				"  (global $%s i32 (i32.const %d))\n"
@@ -630,7 +670,6 @@ wasm_emitdat(Dat *d, FILE *out)
 	case DZ:
 		for (i=0; i<d->u.num; i++)
 			databyte(0);
-		segoff += (int)d->u.num;
 		break;
 	case DB:
 		if (d->isstr) {
@@ -653,10 +692,8 @@ wasm_emitdat(Dat *d, FILE *out)
 					default:   databyte(s[i]);
 					}
 				}
-			segoff = DataBase + datalen;
 		} else {
 			databyte(d->u.num & 0xff);
-			segoff++;
 		}
 		break;
 	case DH:
@@ -666,7 +703,6 @@ wasm_emitdat(Dat *d, FILE *out)
 			: d->type == DW ? 4 : 8;
 		for (i=0; i<len; i++)
 			databyte((d->u.num >> (i*8)) & 0xff);
-		segoff += len;
 		break;
 	}
 }

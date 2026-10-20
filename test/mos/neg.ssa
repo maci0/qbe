@@ -1,0 +1,10 @@
+# expected: 200
+# neg: -(56) + 256 = 200
+
+export
+function w $test() {
+@start
+	%a =w neg 56
+	%b =w add %a, 256
+	ret %b
+}

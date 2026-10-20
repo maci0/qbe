@@ -1,0 +1,47 @@
+# expected: 3
+# signed comparisons near overflow boundaries
+# uses function calls to prevent constant folding
+
+export
+function w $id(w %x) {
+@start
+	ret %x
+}
+
+export
+function w $test() {
+@start
+	%r =w copy 0
+
+	# 127 < -128 should be false (overflow case)
+	%a1 =w call $id(w 127)
+	%a2 =w call $id(w -128)
+	%a =w csltw %a1, %a2
+	%r =w add %r, %a
+
+	# -128 < 127 should be true (overflow case)
+	%b1 =w call $id(w -128)
+	%b2 =w call $id(w 127)
+	%b =w csltw %b1, %b2
+	%r =w add %r, %b
+
+	# -1 < 1 should be true
+	%e1 =w call $id(w -1)
+	%e2 =w call $id(w 1)
+	%e =w csltw %e1, %e2
+	%r =w add %r, %e
+
+	# 1 < -1 should be false
+	%f1 =w call $id(w 1)
+	%f2 =w call $id(w -1)
+	%f =w csltw %f1, %f2
+	%r =w add %r, %f
+
+	# 100 <= 100 should be true
+	%g1 =w call $id(w 100)
+	%g2 =w call $id(w 100)
+	%g =w cslew %g1, %g2
+	%r =w add %r, %g
+
+	ret %r
+}

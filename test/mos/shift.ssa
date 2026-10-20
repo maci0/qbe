@@ -1,0 +1,9 @@
+# expected: 12
+# shift: 3 << 2 = 12
+
+export
+function w $test() {
+@start
+	%r =w shl 3, 2
+	ret %r
+}

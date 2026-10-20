@@ -1,0 +1,26 @@
+# expected: 25
+# multiple function calls chained
+
+function w $double(w %x) {
+@start
+	%r =w mul %x, 2
+	ret %r
+}
+
+function w $add5(w %x) {
+@start
+	%r =w add %x, 5
+	ret %r
+}
+
+export
+function w $test() {
+@start
+	%a =w call $double(w 5)
+	%b =w call $add5(w %a)
+	%c =w call $double(w %b)
+	# double(5)=10, add5(10)=15, double(15)=30
+	# 30 - 5 = 25
+	%r =w sub %c, 5
+	ret %r
+}

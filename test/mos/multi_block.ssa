@@ -1,0 +1,33 @@
+# expected: 10
+# many blocks with complex phi flow
+
+export
+function w $test() {
+@start
+	%a =w copy 1
+	jnz %a, @b1, @b2
+@b1
+	%x =w add %a, 2
+	jmp @b3
+@b2
+	%y =w add %a, 100
+	jmp @b3
+@b3
+	%v =w phi @b1 %x, @b2 %y
+	%c =w csltw %v, 5
+	jnz %c, @b4, @b5
+@b4
+	%v2 =w mul %v, 3
+	jmp @b6
+@b5
+	%v3 =w sub %v, 1
+	jmp @b6
+@b6
+	%r =w phi @b4 %v2, @b5 %v3
+	%c2 =w ceqw %r, 9
+	jnz %c2, @yes, @no
+@yes
+	ret 10
+@no
+	ret %r
+}

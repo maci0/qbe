@@ -1,0 +1,15 @@
+# expected: 7
+# function call with two arguments
+
+function w $sum2(w %a, w %b) {
+@start
+	%r =w add %a, %b
+	ret %r
+}
+
+export
+function w $test() {
+@start
+	%r =w call $sum2(w 2, w 5)
+	ret %r
+}

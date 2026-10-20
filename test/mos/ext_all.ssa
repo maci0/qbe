@@ -1,0 +1,39 @@
+# expected: 6
+# test all 6 extension operations
+
+export function w $test() {
+@start
+  %r =w copy 0
+
+  # extsb: sign-extend byte -1 (0xFF) -> -1 (0xFFFFFFFF)
+  %sb =w extsb 255
+  %t1 =w ceqw %sb, -1
+  %r =w add %r, %t1
+
+  # extub: zero-extend byte 200 (0xC8) -> 200
+  %ub =w extub 200
+  %t2 =w ceqw %ub, 200
+  %r =w add %r, %t2
+
+  # extsh: sign-extend half -100 (0xFF9C) -> -100
+  %sh =w extsh 65436
+  %t3 =w ceqw %sh, -100
+  %r =w add %r, %t3
+
+  # extuh: zero-extend half 50000 (0xC350) -> 50000
+  %uh =w extuh 50000
+  %t4 =w ceqw %uh, 50000
+  %r =w add %r, %t4
+
+  # extsw: sign-extend word -1 to long -> -1
+  %sw =l extsw -1
+  %t5 =w ceql %sw, -1
+  %r =w add %r, %t5
+
+  # extuw: zero-extend word 200 to long -> 200
+  %uw =l extuw 200
+  %t6 =w ceql %uw, 200
+  %r =w add %r, %t6
+
+  ret %r
+}

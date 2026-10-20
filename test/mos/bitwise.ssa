@@ -1,0 +1,10 @@
+# expected: 5
+# bitwise: (0xFF & 0x0F) ^ 0x0A = 5
+
+export
+function w $test() {
+@start
+	%a =w and 255, 15
+	%b =w xor %a, 10
+	ret %b
+}

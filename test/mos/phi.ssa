@@ -1,0 +1,19 @@
+# expected: 55
+# phi node test: sum 1..10 using phi
+
+export
+function w $test() {
+@start
+	jmp @loop
+
+@loop
+	%i =w phi @start 1, @loop %i1
+	%s =w phi @start 0, @loop %s1
+	%s1 =w add %s, %i
+	%i1 =w add %i, 1
+	%c =w csltw %i1, 11
+	jnz %c, @loop, @done
+
+@done
+	ret %s1
+}

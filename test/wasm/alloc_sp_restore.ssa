@@ -1,0 +1,22 @@
+# expected: 84 w
+# test that stack pointer is restored after alloc
+# calling allocating function twice should work correctly
+
+export
+function w $alloc_and_return(w %v) {
+@start
+	%p =l alloc4 4
+	storew %v, %p
+	%r =w load %p
+	ret %r
+}
+
+export
+function w $test() {
+@start
+	# call twice - if SP leaks, second call may corrupt
+	%a =w call $alloc_and_return(w 42)
+	%b =w call $alloc_and_return(w 42)
+	%r =w add %a, %b
+	ret %r
+}

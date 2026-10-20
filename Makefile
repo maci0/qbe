@@ -11,7 +11,8 @@ AMD64OBJ = amd64/targ.o amd64/sysv.o amd64/isel.o amd64/emit.o amd64/winabi.o
 ARM64OBJ = arm64/targ.o arm64/abi.o arm64/isel.o arm64/emit.o
 RV64OBJ  = rv64/targ.o rv64/abi.o rv64/isel.o rv64/emit.o
 WASMOBJ  = wasm/targ.o wasm/abi.o wasm/isel.o wasm/emit.o
-OBJ      = $(COMMOBJ) $(AMD64OBJ) $(ARM64OBJ) $(RV64OBJ) $(WASMOBJ)
+MOSOBJ   = mos/targ.o mos/abi.o mos/isel.o mos/emit.o
+OBJ      = $(COMMOBJ) $(AMD64OBJ) $(ARM64OBJ) $(RV64OBJ) $(WASMOBJ) $(MOSOBJ)
 
 SRCALL   = $(OBJ:.o=.c)
 
@@ -29,6 +30,7 @@ $(AMD64OBJ): amd64/all.h
 $(ARM64OBJ): arm64/all.h
 $(RV64OBJ): rv64/all.h
 $(WASMOBJ): wasm/all.h
+$(MOSOBJ): mos/all.h
 main.o: config.h
 
 config.h:
@@ -89,6 +91,9 @@ check-amd64_win: qbe
 check-wasm: qbe
 	test/wasm/run.sh
 
+check-mos: check check-wasm
+	test/mos/run.sh
+
 check-wasm-native: qbe
 	test/wasm/run_native.sh
 
@@ -138,4 +143,4 @@ wc:
 
 .PHONY: clean clean-gen check check-arm64 check-rv64 check-wasm \
        check-wasm-native check-cppcheck-wasm check-scan-wasm \
-       check-asan-wasm src 80 wc install uninstall
+       check-asan-wasm check-mos src 80 wc install uninstall

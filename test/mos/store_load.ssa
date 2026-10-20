@@ -1,0 +1,29 @@
+# expected: 42
+# store/load round-trip for byte, half, word
+
+export
+function w $test() {
+@start
+	%p =l alloc4 16
+
+	# store byte
+	storeb 10, %p
+
+	# store half at offset 2
+	%p2 =l add %p, 2
+	storeh 15, %p2
+
+	# store word at offset 4
+	%p4 =l add %p, 4
+	storew 17, %p4
+
+	# load them back
+	%b =w loadub %p
+	%h =w loaduh %p2
+	%w =w loadsw %p4
+
+	# 10 + 15 + 17 = 42
+	%s1 =w add %b, %h
+	%r =w add %s1, %w
+	ret %r
+}

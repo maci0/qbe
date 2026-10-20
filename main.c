@@ -26,6 +26,11 @@ extern Target T_arm64;
 extern Target T_arm64_apple;
 extern Target T_rv64;
 extern Target T_wasm;
+extern Target T_mos;
+extern Target T_mos_2a07;
+extern Target T_mos_6510;
+extern Target T_mos_65c02;
+extern Target T_mos_65816;
 
 static Target *tlist[] = {
 	&T_amd64_sysv,
@@ -35,6 +40,11 @@ static Target *tlist[] = {
 	&T_arm64_apple,
 	&T_rv64,
 	&T_wasm,
+	&T_mos,
+	&T_mos_2a07,
+	&T_mos_6510,
+	&T_mos_65c02,
+	&T_mos_65816,
 	0
 };
 static FILE *outf;

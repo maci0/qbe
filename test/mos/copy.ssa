@@ -1,0 +1,10 @@
+# expected: 42
+# copy: return a copy of 42
+
+export
+function w $test() {
+@start
+	%a =w copy 42
+	%b =w copy %a
+	ret %b
+}
