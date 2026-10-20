@@ -7,6 +7,8 @@ test/   Tests.
 amd64/
 arm64/
 rv64/   Architecture-specific code.
+wasm/   Experimental WebAssembly text backend.
+mos/    Experimental MOS 6502 family backend.
 
 The LICENSE file applies to all files distributed.
 
@@ -16,3 +18,8 @@ Invoke make in this directory to create the executable
 file qbe.  Install using 'make install', the standard
 DESTDIR and PREFIX environment variables are supported.
 Alternatively, you may simply copy the qbe binary.
+
+The WebAssembly and MOS targets and their limits are documented
+in wasm/README.md and mos/README.md. Run 'make check' for the host
+tests, 'make check-wasm' for WebAssembly, and 'make check-mos'
+for the host, WebAssembly, and MOS suites.

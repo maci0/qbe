@@ -269,6 +269,8 @@ loadaddr(Con *c, char *rn, E *e)
 {
 	char *p, *l, *s;
 
+	if (T.windows && c->sym.type != SGlo)
+		die("extern/thread unsupported on arm64_win");
 	switch (c->sym.type) {
 	default:
 		die("unreachable");
@@ -285,9 +287,6 @@ loadaddr(Con *c, char *rn, E *e)
 			die("extern thread unavailable on arm64");
 		/* fall through */
 	case SThr:
-		if (T.windows)
-			die("thread-local storage is not "
-				"supported for arm64_win");
 		if (T.apple)
 			s = "\tadrp\tR, S@tlvppage\n"
 			    "\tldr\tR, [R, S@tlvppageoff]\n";

@@ -1071,7 +1071,7 @@ mos_emitfn(Fn *fn, FILE *out)
 	ZpTmp = 0x1E + base;
 
 	/* dynamically allocate zero-page slots based on size */
-	zpoff = calloc(fn->ntmp, sizeof(int));
+	zpoff = emalloc(fn->ntmp * sizeof(int));
 	curr_zp = ZpTmp;
 	for (t=Tmp0; t<fn->ntmp; t++) {
 		zpoff[t - Tmp0] = curr_zp;

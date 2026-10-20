@@ -3,52 +3,14 @@
 enum {
 	DataBase = 1024,
 	DataMax  = 1 << 20,
-	SegMax   = 256,
-};
-
-typedef struct Seg Seg;
-
-struct Seg {
-	char *name;
-	Lnk lnk;
-	int off;
-	int len;
 };
 
 static int modstarted;
 static int dataoff = DataBase;
 static uchar databuf[DataMax];
 static int datalen;
-static Seg segs[SegMax];
-static int nseg;
-static int curseg;
 static int segoff;
-
-static int
-segaddr(char *name)
-{
-	int i, n;
-
-	for (i=0; i<nseg; i++)
-		if (strcmp(segs[i].name, name) == 0)
-			return segs[i].off;
-	/* allocate placeholder for forward-referenced symbol */
-	if (nseg >= SegMax)
-		die("too many data segments");
-	if (dataoff + 8 > DataBase + DataMax)
-		die("data section too large");
-	/* pad databuf to keep addresses aligned with data */
-	while (datalen < dataoff - DataBase)
-		databuf[datalen++] = 0;
-	i = nseg++;
-	segs[i].name = name;
-	segs[i].off = dataoff;
-	segs[i].len = 8;
-	for (n=0; n<8; n++)
-		databuf[datalen++] = 0;
-	dataoff += 8;
-	return segs[i].off;
-}
+static int dataexport;
 
 static char *wtyp[] = { "i32", "i64", "f32", "f64" };
 
@@ -77,7 +39,6 @@ emitref(Ref r, int cls, Fn *fn, FILE *f)
 {
 	Con *c;
 	int64_t v;
-	int addr;
 	char *t;
 
 	t = wtyp[cls];
@@ -101,15 +62,11 @@ emitref(Ref r, int cls, Fn *fn, FILE *f)
 					t, c->bits.i);
 			break;
 		case CAddr:
-			addr = segaddr(str(c->sym.id));
+			fprintf(f, "    global.get $%s\n",
+				sname(str(c->sym.id)));
 			if (c->bits.i)
-				fprintf(f, "    i32.const %d\n"
-					"    i32.const %"PRId64"\n"
-					"    i32.add\n",
-					addr, c->bits.i);
-			else
-				fprintf(f, "    i32.const %d\n",
-					addr);
+				fprintf(f, "    i32.const %"PRId64"\n"
+					"    i32.add\n", c->bits.i);
 			if (cls == Kl)
 				fputs("    i64.extend_i32_u\n", f);
 			break;
@@ -479,6 +436,7 @@ wasm_emitfn(Fn *fn, FILE *out)
 	Ins *i;
 	int n, j, t, hasalloc;
 
+	assert(fn->start);
 	hasalloc = 0;
 	for (b=fn->start; b; b=b->link)
 		for (i=b->ins; i<&b->ins[b->nins]; i++)
@@ -635,37 +593,21 @@ wasm_emitdat(Dat *d, FILE *out)
 	emitmodhdr(out);
 
 	switch (d->type) {
-	case DStart: {
-		char *nm = str(intern(d->name));
-		/* check for placeholder created by forward reference */
-		curseg = -1;
-		for (i=0; i<nseg; i++)
-			if (strcmp(segs[i].name, nm) == 0) {
-				curseg = i;
-				break;
-			}
-		if (curseg < 0) {
-			if (nseg >= SegMax)
-				die("too many data segments");
-			curseg = nseg++;
-			segs[curseg].name = nm;
-			segs[curseg].off = dataoff;
-		}
-		segs[curseg].lnk = *d->lnk;
-		segs[curseg].len = 0;
-		segoff = segs[curseg].off;
+	case DStart:
+		dataoff = (dataoff + d->lnk->align - 1)
+			& -d->lnk->align;
+		if (dataoff > DataBase + DataMax)
+			die("data section too large");
+		segoff = dataoff;
+		dataexport = d->lnk->export;
 		break;
-	}
 	case DEnd:
-		segs[curseg].len = segoff - segs[curseg].off;
-		if (segoff > dataoff)
-			dataoff = segoff;
-		if (segs[curseg].lnk.export)
-			fprintf(out,
-				"  (global $%s i32 (i32.const %d))\n"
-				"  (export \"%s\" (global $%s))\n",
-				sname(d->name), segs[curseg].off,
+		fprintf(out, "  (global $%s i32 (i32.const %d))\n",
+			sname(d->name), dataoff);
+		if (dataexport)
+			fprintf(out, "  (export \"%s\" (global $%s))\n",
 				sname(d->name), sname(d->name));
+		dataoff = segoff;
 		break;
 	case DZ:
 		for (i=0; i<d->u.num; i++)
@@ -735,7 +677,5 @@ wasm_emitfin(FILE *out)
 	modstarted = 0;
 	datalen = 0;
 	dataoff = DataBase;
-	nseg = 0;
-	curseg = 0;
 	segoff = 0;
 }

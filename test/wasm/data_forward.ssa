@@ -1,0 +1,19 @@
+# expected: 1 w
+# Forward references must not reserve overlapping fixed-size data slots.
+
+export function w $test() {
+@start
+	%p =l add $a, 8
+	%x =w load %p
+	%y =w load $b
+	%cx =w ceqw %x, 30
+	%cy =w ceqw %y, 50
+	%ok =w and %cx, %cy
+	%bits =l and $b, 31
+	%aligned =w ceql %bits, 0
+	%r =w and %ok, %aligned
+	ret %r
+}
+
+data $a = { w 10, w 20, w 30, w 40 }
+data $b = align 32 { w 50 }

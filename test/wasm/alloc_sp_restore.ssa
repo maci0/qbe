@@ -1,11 +1,11 @@
-# expected: 84 w
+# expected: 126 w
 # test that stack pointer is restored after alloc
-# calling allocating function twice should work correctly
+# Three half-page allocations require the stack to be restored.
 
 export
 function w $alloc_and_return(w %v) {
 @start
-	%p =l alloc4 4
+	%p =l alloc4 32768
 	storew %v, %p
 	%r =w load %p
 	ret %r
@@ -14,9 +14,10 @@ function w $alloc_and_return(w %v) {
 export
 function w $test() {
 @start
-	# call twice - if SP leaks, second call may corrupt
 	%a =w call $alloc_and_return(w 42)
 	%b =w call $alloc_and_return(w 42)
-	%r =w add %a, %b
+	%c =w call $alloc_and_return(w 42)
+	%s =w add %a, %b
+	%r =w add %s, %c
 	ret %r
 }

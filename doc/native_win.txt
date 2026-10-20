@@ -1,6 +1,12 @@
 There is an experimental amd64_win (native Windows ABI and calling
 convention).
 
+The experimental arm64_win target uses the Windows ARM64 calling
+convention. It reserves x18 and passes variadic arguments in general
+purpose registers. Extern and thread-local data are unsupported.
+Run 'make check-arm64_win' with an aarch64 Windows compiler and the
+configured podman wine-arm64 runner to exercise this target.
+
 In tree, this is currently only tested via cross-compilation from a
 Linux host, and using wine to run the tests.
 
